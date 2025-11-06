@@ -1,4 +1,4 @@
-import Computer_Vision.roboflow_get as roboflow_get
+import Trial_Runs.roboflow_get as roboflow_get
 
 clean_results=""
 clas= []

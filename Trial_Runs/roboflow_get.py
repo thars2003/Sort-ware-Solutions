@@ -1,5 +1,5 @@
 # 1. Import the library
-from inference_sdk import InferenceHTTPClient
+from inference_sdk import InferenceHTTPClient # type: ignore
 
 def roboflow_get(image_path,workflow):
 

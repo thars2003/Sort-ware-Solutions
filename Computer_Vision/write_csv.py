@@ -14,7 +14,7 @@ def create_csv(parameter):
         writer = csv.writer(file)
         writer.writerow(["Name", f"{parameter}"])
 
-def append_csv(name,color):
+def append_csv(name,color,type,price):
     with open(csv_path, mode="a", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow([name, color])
+        writer.writerow([name, color, type, price])
