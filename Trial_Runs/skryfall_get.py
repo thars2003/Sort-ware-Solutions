@@ -1,15 +1,32 @@
-import requests
+import requests # type: ignore
+import pytesseract_test
 
-set_code = "eoe"
-collector_number = "158"
-url = f"https://api.scryfall.com/cards/{set_code}/{collector_number}"
-
+setlist=[]
+text= pytesseract_test.read("test9")
+print(text)
+url = f"https://api.scryfall.com/sets"
 response = requests.get(url)
-data = response.json()
+sets = response.json()
+for s in sets["data"]:
+        setlist.append(s["code"])
 
-# Get card name and color
-card_name = data['name']
-card_colors = data['color_identity']  
+setline=None
+for i, t in enumerate(text):
+    if len(t) >= 3:  # avoid short strings
+        prefix = t[:3].lower()
+        #print(prefix)
+        if prefix in setlist:
+            if (text[i-1][2].isdigit()):
+                setline = i
+#print(setline)
+setcode=text[setline][:3]
+if text[setline-1][0].isalpha():
+    collectornumber = int(text[setline-1][2:6])
+else:
+    collectornumber = int(text[setline-1][:3])
+#print(setline)
 
-print(f"Name: {card_name}")
-print(f"Colors: {card_colors}")
+
+print(setcode)
+print(collectornumber)
+
