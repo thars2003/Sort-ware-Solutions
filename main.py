@@ -16,4 +16,4 @@ import Computer_Vision.Magic as Magic
 #     set_code,col_num=Magic.isolate_identifier(text,setlist)
 #     print(f"{i} Set Code: {set_code}, Collector Number: {col_num}")
 
-Magic.magic_main()
+Magic.magic_main() 

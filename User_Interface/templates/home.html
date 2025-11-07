@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ title }}</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <img src="{{ url_for('static', filename='pokemon.png') }}">
 </head>
 <body>
     <h1>{{ title }}</h1>
