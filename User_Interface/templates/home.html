@@ -4,11 +4,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }}</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">  <!-- favicon -->
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">  <!-- CSS file -->
+
+    <div class="toggle-cont">
+    <input class="toggle-input" id="toggle" name="toggle" type="checkbox" />
+    <label class="toggle-label" for="toggle">
+        <div class="cont-label-play">
+        <span class="label-play"></span>
+        </div>
+    </label>
+    </div>
+    <img src="{{ url_for('static', filename='logo.png') }}" class="center_logo">
+    <!-- <div class="emergency-wrapper">
+    <div class="button-container">
+        <button class="brutalist-button emergency" id="emergencyBtn">
+        <div class="stop-symbol">🛑</div>
+        <div class="button-text">
+            <span>EMERGENCY</span>
+            <span>STOP</span>
+        </div>
+        </button>
+    </div>
+    </div> --> 
+
+</head>
+
+
 <body>
-    <h1>{{ title }}</h1>
-    <p>{{ message }}</p>
+    
+    
+    
+    <!-- <div class="emergency-wrapper">
+    <div class="button-container">
+        <button class="brutalist-button emergency" id="emergencyBtn">
+        <div class="stop-symbol">🛑</div>
+        <div class="button-text">
+            <span>EMERGENCY</span>
+            <span>STOP</span>
+        </div>
+        </button>
+    </div>
+    </div> -->
+      
+    <div class="flex-container bottom-row" style="padding-top: 50px;">
+        <section class="flex-child">
+            <img src="{{ url_for('static', filename='mtg.png') }}" class="center_mtg"> <!-- candy image -->
+ 
+            <div class="radio-input" style="padding-bottom: 50px;" class="flex-child">
+                <label class="label">
+                    <input type="radio" id="value-1" checked="" name="value-radio" value="value-1"/>
+                    <p class="text">Type</p>
+                </label>
+                <label class="label">
+                    <input type="radio" id="value-2" name="value-radio" value="value-2" />
+                    <p class="text">Color</p>
+                </label>
+                <label class="label">
+                    <input type="radio" id="value-3" name="value-radio" value="value-3" />
+                    <p class="text">Price</p>
+                </label>
+            </div>
+        </section>
+        <section class="flex-child">
+            <img src="{{ url_for('static', filename='pokemon.png') }}"  class="center_pokemon"> <!-- mtg logo image -->
+
+            <div class="radio-input" style="padding-bottom: 50px;" class="flex-child">
+                <label class="label">
+                    <input type="radio" id="value-1" checked="" name="value-radio" value="value-1"/>
+                    <p class="text">Type</p>
+                </label>
+                <label class="label">
+                    <input type="radio" id="value-2" name="value-radio" value="value-2" />
+                    <p class="text">Color</p>
+                </label>
+                <label class="label">
+                    <input type="radio" id="value-3" name="value-radio" value="value-3" />
+                    <p class="text">Price</p>
+                </label>
+            </div>
+        </section>
+    </div>
+<script>
+    const btn = document.getElementById('emergencyBtn');
+    btn.addEventListener('click', () => {
+    btn.classList.toggle('active');
+    });
+</script>
+
+
+
 </body>
 </html>
+
