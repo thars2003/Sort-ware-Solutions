@@ -8,33 +8,32 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">  <!-- CSS file -->
 
-    <div class="toggle-cont">
-    <input class="toggle-input" id="toggle" name="toggle" type="checkbox" />
-    <label class="toggle-label" for="toggle">
-        <div class="cont-label-play">
-        <span class="label-play"></span>
-        </div>
-    </label>
-    </div>
-    <img src="{{ url_for('static', filename='logo.png') }}" class="center_logo">
-    <!-- <div class="emergency-wrapper">
-    <div class="button-container">
-        <button class="brutalist-button emergency" id="emergencyBtn">
-        <div class="stop-symbol">🛑</div>
-        <div class="button-text">
-            <span>EMERGENCY</span>
-            <span>STOP</span>
-        </div>
-        </button>
-    </div>
-    </div> --> 
-
 </head>
 
 
 <body>
-    
-    
+    <div class="flex-container top-row">
+        <section class="flex-child-left">
+             <div class="toggle-cont">
+                <input class="toggle-input" id="toggle" name="toggle" type="checkbox" />
+                <label class="toggle-label" for="toggle">
+                    <div class="cont-label-play">
+                    <span class="label-play"></span>
+                    </div>
+                </label>
+                </div>
+        </section>
+        <section class="flex-child-right">
+            <button class="Btn" id="emergencyBtn">
+                <div class="sign">
+                    <!-- Stop Sign Icon (octagon) -->
+                    <img src="{{ url_for('static', filename='stop.png') }}">
+                </div>
+                <div class="text">Emergency Stop</div>
+            </button>
+        </section>
+    </div>
+    <img src="{{ url_for('static', filename='logo.png') }}" class="center_logo">  
     
     <!-- <div class="emergency-wrapper">
     <div class="button-container">
@@ -87,10 +86,11 @@
         </section>
     </div>
 <script>
-    const btn = document.getElementById('emergencyBtn');
-    btn.addEventListener('click', () => {
-    btn.classList.toggle('active');
-    });
+  const emergencyBtn = document.getElementById('emergencyBtn');
+  emergencyBtn.addEventListener('click', function() {
+    // toggle "active" class on each click
+    this.classList.toggle('active');
+  });
 </script>
 
 

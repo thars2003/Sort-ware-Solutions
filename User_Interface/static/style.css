@@ -50,6 +50,23 @@ h1 {
     position: relative;
     /* border: 2px solid yellow; */
 }  
+
+.flex-child-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  /* border: 2px solid yellow; */
+}
+
+.flex-child-right {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  /* border: 2px solid yellow; */
+}
+
 .flex-child:first-child {
     margin-right: 20px;
 } 
@@ -260,50 +277,102 @@ h1 {
   box-shadow: 2px 2px 0px #000;
   background-color: #ff0000;
 }
-/* 
-/* STOP symbol */
-/* .stop-symbol {
-  font-size: 40px;
-  z-index: 2;
-  transition: opacity 0.4s ease, transform 0.4s ease;
+
+.Btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: rgb(220, 0, 0); /* base red */
 }
 
-/* Text that appears when pressed */
-/* .button-text {
+/* stop sign icon container */
+.sign {
+  width: 100%;
+  transition-duration: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  filter: brightness(0) invert(1); /* makes black icon white */
+}
+
+/* text inside button */
+.Btn .text {
   position: absolute;
-  text-align: center;
+  right: 0%;
+  width: 0%;
   opacity: 0;
-  transition: opacity 0.4s ease, transform 0.4s ease;
-  transform: translateY(15px);
+  color: white;
+  font-size: 1.1em;
+  font-weight: 700;
+  transition-duration: 0.3s;
 }
 
-.button-text span {
-  display: block;
-  line-height: 1.1;
+
+/* --- Hover expansion --- */
+.Btn:hover {
+  width: 190px;
+  border-radius: 40px;
+  transition-duration: 0.3s;
+  background-color: rgb(180, 0, 0);
 }
 
-.button-text span:first-child {
-  font-size: 16px;
-  font-weight: 600;
+.Btn:hover .sign {
+  width: 30%;
+  padding-left: 5px;
+  transition-duration: 0.3s;
 }
 
-.button-text span:last-child {
-  font-size: 22px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-/* Show text when button is hovered or active */
-/* .brutalist-button:hover .stop-symbol,
-.brutalist-button.active .stop-symbol {
-  opacity: 0;
-  transform: translateY(-15px);
-}
-
-.brutalist-button:hover .button-text,
-.brutalist-button.active .button-text {
+.Btn:hover .text {
   opacity: 1;
-  transform: translateY(0);
-} */
+  width: 70%;
+  padding-right: 10px;
+  transition-duration: 0.3s;
+}
 
+/* --- Active (clicked / toggled) state --- */
+.Btn.active {
+  background-color: #ff0000; /* bright red */
+  transform: translate(2px, 2px);
+  box-shadow: inset 2px 2px 8px rgba(0, 0, 0, 0.3);
+  width: 190px; /* same as hover width */
+  border-radius: 40px;
+  transition-duration: 0.3s;
+}
 
+.Btn.active .sign {
+  width: 30%;
+  padding-left: 5px;
+  transition-duration: 0.3s;
+}
+
+.Btn.active .text {
+  opacity: 1;
+  width: 70%;
+  padding-right: 10px;
+  transition-duration: 0.3s;
+}
+
+/* --- Slight darker red when hovering while active --- */
+.Btn.active:hover {
+  background-color: #cc0000;
+}
+
+/* --- Click press feedback --- */
+.Btn:active {
+  transform: translate(2px, 2px);
+}
