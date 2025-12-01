@@ -9,12 +9,27 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">  <!-- CSS file -->
 
 </head>
+<!-- <form method="POST" action="/send_data">
+  <div class="toggle-cont">
+      <button type="submit" class="toggle-label">
+          <div class="cont-label-play">
+              <span class="label-play"></span>
+          </div>
+      </button>
+  </div>
 
+  <div class="radio-input">
+      <label><input type="radio" name="parameter" value="Type" checked> Type</label>
+      <label><input type="radio" name="parameter" value="Color"> Color</label>
+      <label><input type="radio" name="parameter" value="Price"> Price</label>
+  </div>
+</form> -->
 
 <body>
     <div class="flex-container top-row">
-        <section class="flex-child-left">
+        <section class="flex-child-left"><!-- Start/Pause Button-->
              <div class="toggle-cont">
+                <!-- <button type="submit" class="toggle-label"></button> -->
                 <input class="toggle-input" id="toggle" name="toggle" type="checkbox" />
                 <label class="toggle-label" for="toggle">
                     <div class="cont-label-play">
@@ -23,10 +38,9 @@
                 </label>
                 </div>
         </section>
-        <section class="flex-child-right">
+        <section class="flex-child-right"> <!-- Stop Button-->
             <button class="Btn" id="emergencyBtn">
                 <div class="sign">
-                    <!-- Stop Sign Icon (octagon) -->
                     <img src="{{ url_for('static', filename='stop.png') }}">
                 </div>
                 <div class="text">Emergency Stop</div>
@@ -34,24 +48,13 @@
         </section>
     </div>
     <img src="{{ url_for('static', filename='logo.png') }}" class="center_logo">  
-    
-    <!-- <div class="emergency-wrapper">
-    <div class="button-container">
-        <button class="brutalist-button emergency" id="emergencyBtn">
-        <div class="stop-symbol">🛑</div>
-        <div class="button-text">
-            <span>EMERGENCY</span>
-            <span>STOP</span>
-        </div>
-        </button>
-    </div>
-    </div> -->
+
       
     <div class="flex-container bottom-row" style="padding-top: 50px;">
         <section class="flex-child">
-            <img src="{{ url_for('static', filename='mtg.png') }}" class="center_mtg"> <!-- candy image -->
+            <img src="{{ url_for('static', filename='mtg.png') }}" class="center_mtg"> <!-- mtg logo image -->
  
-            <div class="radio-input" style="padding-bottom: 50px;" class="flex-child">
+            <div class="radio-input" style="padding-bottom: 50px;" class="flex-child"><!-- mtg parameters -->
                 <label class="label">
                     <input type="radio" id="value-1" checked="" name="value-radio" value="value-1"/>
                     <p class="text">Type</p>
@@ -67,9 +70,9 @@
             </div>
         </section>
         <section class="flex-child">
-            <img src="{{ url_for('static', filename='pokemon.png') }}"  class="center_pokemon"> <!-- mtg logo image -->
+            <img src="{{ url_for('static', filename='pokemon.png') }}"  class="center_pokemon"> <!-- pokemon logo image -->
 
-            <div class="radio-input" style="padding-bottom: 50px;" class="flex-child">
+            <div class="radio-input" style="padding-bottom: 50px;" class="flex-child"><!-- pokemon parameters -->
                 <label class="label">
                     <input type="radio" id="value-1" checked="" name="value-radio" value="value-1"/>
                     <p class="text">Type</p>
@@ -85,7 +88,7 @@
             </div>
         </section>
     </div>
-<script>
+<script>// Emergency Stop Button Script
   const emergencyBtn = document.getElementById('emergencyBtn');
   emergencyBtn.addEventListener('click', function() {
     // toggle "active" class on each click

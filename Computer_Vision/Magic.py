@@ -15,7 +15,7 @@ def magic_main():
     for s in sets["data"]:
         setlist.append(s["code"])
 
-    for i in range(1, 18):
+    for i in range(1, 16):
         text=Read_Cards.read(f"test{i}")
         print(text)
         set_code,col_num=isolate_identifier(text,setlist)
@@ -45,7 +45,7 @@ def isolate_identifier(text,setlist, debug=False):
 
     col_num= None
     if set_index is not None:
-        indexes= [set_index-1, set_index-2, set_index+1]
+        indexes= [set_index-1, set_index-2, set_index+1, set_index-3, set_index-4, set_index-5]
         for i in indexes:
             if 0<= i< len(text):
                 line= text[i].replace("O","0").replace("o","0").replace("l","1")
