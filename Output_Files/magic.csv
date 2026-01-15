@@ -1,16 +1,16 @@
 Name,magic
-Avaricious Dragon,['R'],Creature — Dragon,1.12
+Avaricious Dragon,['R'],Creature — Dragon,1.05
 Davriel's Shadowfugue,['B'],Sorcery,0.05
-"Niv-Mizzet, Supreme","['B', 'G', 'R', 'U', 'W']",Legendary Creature — Dragon Avatar,0.40
-Rite of Replication,['U'],Sorcery,0.54
-Timberland Ancient,['G'],Creature — Treefolk,0.07
-Timberland Ancient,['G'],Creature — Treefolk,0.07
+"Niv-Mizzet, Supreme","['B', 'G', 'R', 'U', 'W']",Legendary Creature — Dragon Avatar,0.41
+Rite of Replication,['U'],Sorcery,0.51
+Timberland Ancient,['G'],Creature — Treefolk,0.08
+Timberland Ancient,['G'],Creature — Treefolk,0.08
 unknown,unknown,unknown,unknown
-On Serra's Wings,['W'],Legendary Enchantment — Aura,0.27
+On Serra's Wings,['W'],Legendary Enchantment — Aura,0.28
 "Danitha Capashen, Paragon",['W'],Legendary Creature — Human Knight,0.39
 Rogue's Passage,[],Land,0.46
-Rosie Cotton of South Lane,['W'],Legendary Creature — Halfling Peasant,0.10
+Rosie Cotton of South Lane,['W'],Legendary Creature — Halfling Peasant,0.14
 Pain // Suffering,"['B', 'R']",Sorcery // Sorcery,0.04
 Grand Entryway // Elegant Rotunda,['W'],Enchantment — Room // Enchantment — Room,0.06
-Forest,['G'],Basic Land — Forest,0.10
-Esquire of the King,['W'],Creature — Human Soldier,0.06
+Forest,['G'],Basic Land — Forest,0.12
+Esquire of the King,['W'],Creature — Human Soldier,0.07

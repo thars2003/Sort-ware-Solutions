@@ -1,0 +1,198 @@
+html {
+    height: 100%; /* <-- REQUIRED FIX */
+}
+body {
+    background-color: #111111;
+    color: #e0e0e0; /* Light text for contrast */
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    height: 100%
+}
+
+
+/* Container Styling */
+.container {
+    background-color: #111111; /* 1a1a1a */
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 8px; /* Slightly rounded corners */
+
+    /* The Maroon Border & Glow Effect */
+    border: 2px solid #570000; /* Solid Maroon Border */
+    box-shadow: 0 0 10px rgba(87, 0, 0, 0.7); /* The Glow Effect (Maroon) */
+    transition: box-shadow 0.3s ease-in-out; /* Smooth transition for hover */
+}
+
+/* Optional: Add a stronger glow on hover for interactivity */
+.container:hover {
+    box-shadow: 0 0 15px rgba(87, 0, 0, 1), 0 0 20px rgba(255, 0, 0, 0.3); /* Stronger/multi-layered glow */
+}
+.main-container {
+    max-width: 100%;
+    height: 100%;
+    margin: 0 auto; /* Center the whole layout */
+    display: flex;
+    
+    flex-direction: column;
+
+}
+
+/* Layout for the Top Two Containers */
+.top-row {
+    display: flex;
+    gap: 20px; /* Space between the two top containers */
+    margin-bottom: 20px; /* Space between the top and bottom sections */
+    flex: 0 0 calc(45% - 20px); /* New: Takes 1 unit of vertical space */
+    min-height: 0;
+}
+
+.container-1,
+.container-2 {
+    flex: 1; 
+    
+}
+
+.container-3 {
+    display: flex;
+    flex-direction: column; 
+    flex: 0 0 calc(45% - 20px);
+    min-height: 0;
+}
+.container-4 {
+    display: flex;
+    flex-direction: column; 
+    flex: 0 0 10%;
+    min-height: 0;
+    margin-bottom: 20px; 
+    border: 2px solid #005724; /* Solid Maroon Border */
+    box-shadow: none !important;
+    
+}
+
+h2 {
+    color: #800000;
+    border-bottom: 1px solid #570000;
+    padding-bottom: 5px;
+    font-size: 2.5vmin; /* Slightly smaller than h2 */
+}
+h3 {
+    color: #800000;
+    /* border-bottom: 1px solid #570000; */
+    padding-bottom: 5px;
+    
+    /* FIX: Set font size based on the viewport width */
+    font-size: 2vmin; /* Scales with 2.5% of the viewport minimum dimension */
+}
+p {
+    line-height: 1.0;
+    /* FIX: Set font size based on the viewport width */
+    font-size: 2vmin; /* Scales with 1.5% of the viewport minimum dimension */
+}
+li {
+    line-height: 1.6;
+    /* FIX: Set font size based on the viewport width */
+    font-size: 2vmin; /* Scales with 1.5% of the viewport minimum dimension */
+}
+
+
+
+.param-row {
+    display: flex;
+    gap: 30px; /* Space between the two columns (Game and Sort By) */
+    width: 100%;
+    /* Allow content to fill remaining vertical space in container-1 */
+    flex-grow: 1; 
+    overflow-y: auto; /* Allow scrolling if content is too tall */
+}
+
+.game-params, 
+.sort-params {
+    flex: 1; /* Both columns take up equal width */
+    min-width: 0;
+}
+
+/* Style for the inner row (Text + Toggle) */
+.switch-container {
+    display: flex;
+    justify-content: space-between; /* Pushes the text to the left and toggle to the right */
+    align-items: center; /* Vertically centers the text and the switch */
+    margin-bottom: 8px; /* Space between each parameter line */
+}
+
+/* Ensure paragraph text is correctly styled within the new structure */
+.switch-container p {
+    margin: 0; /* Remove default paragraph margins */
+    font-size: 2vmin;
+    flex-shrink: 0; /* Prevents text from shrinking */
+}
+
+
+
+/* --- TOGGLE SWITCH STYLING (Based on standard CSS toggle) --- */
+
+/* The switch - container for the toggle */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 34px;
+  height: 20px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #333333; /* Dark background when off */
+  transition: .4s;
+  border: 1px solid #570000; /* Subtle maroon border for the switch */
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 2px;
+  background-color: #e0e0e0; /* Light gray circle */
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #800000; /* Maroon color when on */
+}
+
+/* Glow effect when the switch is ON */
+input:checked + .slider {
+    box-shadow: 0 0 5px #570000;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #800000;
+}
+
+input:checked + .slider:before {
+  transform: translateX(12px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 20px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
