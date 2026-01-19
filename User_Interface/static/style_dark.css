@@ -1,198 +1,248 @@
-html {
-    height: 100%; /* <-- REQUIRED FIX */
-}
-body {
-    background-color: #111111;
-    color: #e0e0e0; /* Light text for contrast */
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 20px;
+/* ---------- BASE RESET ---------- */
+* {
     box-sizing: border-box;
-    height: 100%
 }
 
-
-/* Container Styling */
-.container {
-    background-color: #111111; /* 1a1a1a */
-    padding-left: 20px;
-    padding-right: 20px;
-    border-radius: 8px; /* Slightly rounded corners */
-
-    /* The Maroon Border & Glow Effect */
-    border: 2px solid #570000; /* Solid Maroon Border */
-    box-shadow: 0 0 10px rgba(87, 0, 0, 0.7); /* The Glow Effect (Maroon) */
-    transition: box-shadow 0.3s ease-in-out; /* Smooth transition for hover */
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #111111;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
 }
 
-/* Optional: Add a stronger glow on hover for interactivity */
-.container:hover {
-    box-shadow: 0 0 15px rgba(87, 0, 0, 1), 0 0 20px rgba(255, 0, 0, 0.3); /* Stronger/multi-layered glow */
-}
+/* ---------- PAGE WRAPPERS ---------- */
 .main-container {
-    max-width: 100%;
-    height: 100%;
-    margin: 0 auto; /* Center the whole layout */
+    min-height: 100vh;          /* Full viewport height */
     display: flex;
-    
-    flex-direction: column;
-
+    justify-content: center;    /* Vertical centering */
+    align-items: center;        /* Horizontal centering */
 }
 
-/* Layout for the Top Two Containers */
+.outer-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 95%;
+}
+.controls-area {
+    width: 100%;
+    min-height: 80px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* LEFT + RIGHT */
+
+    padding: 0 30px;
+}
+.controls-logo {
+    height:72px;        /* adjust as needed */
+    width: auto;
+}
+
+/* ---------- GENERAL CONTAINER ---------- */
+.container {
+    background-color: #111111;
+    padding: 20px;
+    border-radius: 8px;
+
+    border: 2px solid #570000;
+    box-shadow: 0 0 10px rgba(87, 0, 0, 0.7);
+
+    display: flex;
+    flex-direction: column;
+}
+
+.container:hover {
+    box-shadow: 0 0 15px rgba(87, 0, 0, 1),
+                0 0 20px rgba(255, 0, 0, 0.3);
+}
+
+/* ---------- TOP TITLE ---------- */
+.container-5 {
+    width: 100%;
+    padding: 25px;
+    margin-top: 10px;
+
+    border-radius: 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ---------- CONTROLS BAR ---------- */
+.container-4 {
+    border: 2px solid #005724;
+    box-shadow: none;
+}
+
+/* ---------- TOP TWO PANELS ---------- */
 .top-row {
     display: flex;
-    gap: 20px; /* Space between the two top containers */
-    margin-bottom: 20px; /* Space between the top and bottom sections */
-    flex: 0 0 calc(45% - 20px); /* New: Takes 1 unit of vertical space */
-    min-height: 0;
+    gap: 20px;
 }
 
 .container-1,
+.container-3,
 .container-2 {
-    flex: 1; 
+    flex: 1;
+    align-items: flex-start;
     
 }
 
+/* ---------- PARAMETER ROW ---------- */
+.param-row {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    /* gap:30px */
+}
+
+.game-params {
+    flex: 0 0 auto;
+}
+
+.sort-params {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 100px;
+    gap: 20px;
+}
+
+.game-image {
+    display: inline-block;
+    margin-left: 0;
+    width: 100%;
+    max-width: 240px;
+    margin: 10px 0;
+
+    align-self: flex-start;
+
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(87, 0, 0, 0.6);
+}
+
+/* ---------- SYSTEM STATUS ---------- */
 .container-3 {
-    display: flex;
-    flex-direction: column; 
-    flex: 0 0 calc(45% - 20px);
-    min-height: 0;
-}
-.container-4 {
-    display: flex;
-    flex-direction: column; 
-    flex: 0 0 10%;
-    min-height: 0;
-    margin-bottom: 20px; 
-    border: 2px solid #005724; /* Solid Maroon Border */
-    box-shadow: none !important;
-    
+    width: 100%;
 }
 
+/* ---------- TEXT ---------- */
 h2 {
+
     color: #800000;
     border-bottom: 1px solid #570000;
     padding-bottom: 5px;
-    font-size: 2.5vmin; /* Slightly smaller than h2 */
+    margin-top: 0;
+    font-size: 2.5vmin;
+    
+}
+h1 {
+
+    color: #800000;
+    border-bottom: 1px solid #570000;
+    padding-bottom: 5px;
+    margin-top: 0;
+    font-size: 2.5vmin;
+    text-align: center;
+    
 }
 h3 {
     color: #800000;
-    /* border-bottom: 1px solid #570000; */
-    padding-bottom: 5px;
-    
-    /* FIX: Set font size based on the viewport width */
-    font-size: 2vmin; /* Scales with 2.5% of the viewport minimum dimension */
-}
-p {
-    line-height: 1.0;
-    /* FIX: Set font size based on the viewport width */
-    font-size: 2vmin; /* Scales with 1.5% of the viewport minimum dimension */
-}
-li {
-    line-height: 1.6;
-    /* FIX: Set font size based on the viewport width */
-    font-size: 2vmin; /* Scales with 1.5% of the viewport minimum dimension */
-}
-
-
-
-.param-row {
-    display: flex;
-    gap: 30px; /* Space between the two columns (Game and Sort By) */
-    width: 100%;
-    /* Allow content to fill remaining vertical space in container-1 */
-    flex-grow: 1; 
-    overflow-y: auto; /* Allow scrolling if content is too tall */
-}
-
-.game-params, 
-.sort-params {
-    flex: 1; /* Both columns take up equal width */
-    min-width: 0;
-}
-
-/* Style for the inner row (Text + Toggle) */
-.switch-container {
-    display: flex;
-    justify-content: space-between; /* Pushes the text to the left and toggle to the right */
-    align-items: center; /* Vertically centers the text and the switch */
-    margin-bottom: 8px; /* Space between each parameter line */
-}
-
-/* Ensure paragraph text is correctly styled within the new structure */
-.switch-container p {
-    margin: 0; /* Remove default paragraph margins */
+    margin-top: 0;
     font-size: 2vmin;
-    flex-shrink: 0; /* Prevents text from shrinking */
 }
 
-
-
-/* --- TOGGLE SWITCH STYLING (Based on standard CSS toggle) --- */
-
-/* The switch - container for the toggle */
-.switch {
-  position: relative;
-  display: inline-block;
-  width: 34px;
-  height: 20px;
+p, li {
+    font-size: 2vmin;
+    line-height: 1.4;
 }
 
-/* Hide default HTML checkbox */
-.switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
+/* ---------- RADIO BUTTONS ---------- */
+.radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-/* The slider */
-.slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #333333; /* Dark background when off */
-  transition: .4s;
-  border: 1px solid #570000; /* Subtle maroon border for the switch */
+.radio-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 2vmin;
+    color: #e0e0e0;
 }
 
-.slider:before {
-  position: absolute;
-  content: "";
-  height: 14px;
-  width: 14px;
-  left: 3px;
-  bottom: 2px;
-  background-color: #e0e0e0; /* Light gray circle */
-  transition: .4s;
+.radio-container input {
+    display: none;
 }
 
-input:checked + .slider {
-  background-color: #800000; /* Maroon color when on */
+/* Outer circle */
+.custom-radio {
+    width: 16px;
+    height: 16px;
+    border: 2px solid #570000;
+    border-radius: 50%;
+    position: relative;
+    transition: 0.3s;
 }
 
-/* Glow effect when the switch is ON */
-input:checked + .slider {
-    box-shadow: 0 0 5px #570000;
+/* Inner dot */
+.custom-radio::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    background-color: #800000;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    transition: 0.3s;
 }
 
-input:focus + .slider {
-  box-shadow: 0 0 1px #800000;
+/* Checked state */
+.radio-container input:checked + .custom-radio::after {
+    transform: translate(-50%, -50%) scale(1);
 }
 
-input:checked + .slider:before {
-  transform: translateX(12px);
+.radio-container input:checked + .custom-radio {
+    box-shadow: 0 0 6px rgba(128, 0, 0, 0.8);
 }
 
-/* Rounded sliders */
-.slider.round {
-  border-radius: 20px;
+.play-pause-btn {
+    background-color: #111111;
+    color: #e0e0e0;
+
+    border: 2px solid #570000;
+    border-radius: 50%;
+
+    width: 72px;        /* bigger */
+    height: 72px;       /* bigger */
+    font-size: 28px;    /* bigger icon */
+
+    cursor: pointer;
+
+    box-shadow: 0 0 10px rgba(87, 0, 0, 0.7);
+    transition: box-shadow 0.3s ease, transform 0.2s ease, background-color 0.3s ease;
+}
+.play-pause-btn:hover {
+    box-shadow:
+        0 0 15px rgba(87, 0, 0, 1),
+        0 0 20px rgba(255, 0, 0, 0.3);
 }
 
-.slider.round:before {
-  border-radius: 50%;
+.play-pause-btn:active {
+    transform: scale(1.05);
+    background-color: #1a1a1a;
+}
+
+/* Optional "playing" state */
+.play-pause-btn.playing {
+    background-color: #800000;
+    color: #111111;
 }

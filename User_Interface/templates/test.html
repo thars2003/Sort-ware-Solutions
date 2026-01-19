@@ -2,73 +2,129 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sort-Ware Solutions</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">  <!-- favicon -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='logo.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style_dark.css') }}">
 </head>
-<body>
+
+<body style="background-image:url('{{ url_for('static', filename='background.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center;">
     <div class="main-container">
+        <div class="outer-wrapper">
+            <!-- HEADER -->
+            <div class="container container-5">
+                   
 
-        
-        <div class="container container-4">
-            <h3>Controls</h3>
-            
-        </div>
+            <!-- CONTROLS -->
+                <div class="controls-area">
+                    <img src="{{ url_for('static', filename='logo.png') }}" alt="Sort-Ware Solutions Logo"class="controls-logo">
+                    <h1>Card Sorter</h1>   
 
-        <div class="top-row">
-            <div class="container container-1">
-                <h2>Sorting Parameters</h2>
-                <div class="param-row"> 
-                    <div class="game-params">
-                        <h3>Game</h3>
-                        <div class="switch-container">
-                            <p>Magic</p>
-                            <label class="switch"><input type="checkbox"><span class="slider round"></span></label>
-                        </div>
-                        <div class="switch-container">
-                            <p>Pokemon</p>
-                            <label class="switch"><input type="checkbox"><span class="slider round"></span></label>
+                    <button class="play-pause-btn" aria-label="Play or Pause" justify-content="center" align-items="center">
+                        ▶
+                    </button>
+                </div>
+
+                <!-- TOP TWO PANELS -->
+                <div class="top-row">
+                    <div class="container container-1">
+                        <h2>Magic the Gathering</h2>
+
+                        <div class="param-row">
+                            <div class="game-params"></div>
+                                <img src="{{ url_for('static', filename='mtg_square.png') }}" class="game-image">
+
+                            <div class="sort-params">
+                                <h2>Sort By:</h2>
+
+                                <div class="radio-group">
+                                    <label class="radio-container">
+                                        <input type="radio" name="sort_mtg" checked>
+                                        <span class="custom-radio"></span>
+                                        Price
+                                    </label>
+
+                                    <label class="radio-container">
+                                        <input type="radio" name="sort_mtg">
+                                        <span class="custom-radio"></span>
+                                        Color
+                                    </label>
+
+                                    <label class="radio-container">
+                                        <input type="radio" name="sort_mtg">
+                                        <span class="custom-radio"></span>
+                                        Type
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="sort-params">
-                        <h3>Sort By</h3>
-                        <div class="switch-container">
-                            <p>Price</p>
-                            <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>
-                        </div>
-                        <div class="switch-container">
-                            <p>Color</p>
-                            <label class="switch"><input type="checkbox"><span class="slider round"></span></label>
-                        </div>
-                        <div class="switch-container">
-                            <p>Type</p>
-                            <label class="switch"><input type="checkbox" checked><span class="slider round"></span></label>
-                        </div>
-                        <div class="switch-container">
-                            <p>Subtype</p>
-                            <label class="switch"><input type="checkbox"><span class="slider round"></span></label>
+                    <div class="container container-2">
+                        <h2>System Status</h2>
+                        <div class="param-row">
+                            <div class="game-params"></div>
+                                <img src="{{ url_for('static', filename='mtg_poke.jpg') }}" class="game-image">
+
+                            <div class="sort-params">
+                                <h2>Sorted Cards:</h2>
+                            </div>
                         </div>
                     </div>
-                </div> 
-            </div>
-  
-            <div class="container container-2">
-                <h2>System Status</h2>
-                <p>This is the second shorter block of content, sitting next to the first one.</p>
-            </div>
-        </div>
 
-        <div class="container container-3">
-            <h2>Card Log</h2>
-            <p>This container stretches across the full width below the two top containers. It's designed to be the "lone rectangular" one at the bottom.</p>
-            <ul>
-                <li>Item 1</li>
-                <li>Item 2</li>
-                <li>Item 3</li>
-            </ul>
+                    <div class="container container-2">
+                        <h2>Pokemon</h2>
+
+                        <div class="param-row">
+                            <div class="game-params"></div>
+                                 <img src="{{ url_for('static', filename='poke_square.png') }}" class="game-image">
+
+                            <div class="sort-params">
+                                <h2>Sort By:</h2>
+                               <div class="radio-group">
+                                    <label class="radio-container">
+                                        <input type="radio" name="sort_mtg" checked>
+                                        <span class="custom-radio"></span>
+                                        Price
+                                    </label>
+
+                                    <label class="radio-container">
+                                        <input type="radio" name="sort_mtg">
+                                        <span class="custom-radio"></span>
+                                        Color
+                                    </label>
+
+                                    <label class="radio-container">
+                                        <input type="radio" name="sort_mtg">
+                                        <span class="custom-radio"></span>
+                                        Type
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <!-- SYSTEM STATUS -->
+                <div class="container container-3">
+                    <h2>System Log</h2>
+                    <p>This container stretches across the full width below the two top containers.</p>
+                    <ul>
+                        <li>Item 1</li>
+                        <li>Item 2</li>
+                        <li>Item 3</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </body>
 </html>
+<script>
+    const btn = document.querySelector('.play-pause-btn');
+    btn.addEventListener('click', () => {
+        btn.classList.toggle('playing');
+        btn.textContent = btn.classList.contains('playing') ? '⏸' : '▶';
+    });
+</script>
