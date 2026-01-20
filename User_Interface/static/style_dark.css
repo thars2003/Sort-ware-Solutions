@@ -90,6 +90,10 @@ html, body {
     align-items: flex-start;
     
 }
+.container-3 {
+    min-height: 320px;       /* elongated from start */
+    max-height: 320px;       /* fixed height, scrollable inside */
+}
 
 /* ---------- PARAMETER ROW ---------- */
 .param-row {
@@ -245,4 +249,30 @@ p, li {
 .play-pause-btn.playing {
     background-color: #800000;
     color: #111111;
+}
+
+.log-container {
+    width: 100%;               /* full width of the container */
+    max-height: 240px;         /* enough for ~3 cards (adjust as needed) */
+    overflow-y: auto;          /* scroll when content exceeds height */
+    background-color: transparent; /* match page background */
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;                  /* spacing between cards */
+}
+
+.log-card {
+    padding: 8px 12px;
+    background-color: rgba(255, 255, 255, 0.05); /* subtle highlight */
+    border-left: 3px solid rgb(87,0, 0);             /* optional colored bar */
+    border-radius: 4px;
+    line-height: 1.4;
+    width: 100%;             /* stretch each card to container width */
+    box-sizing: border-box;
+}
+
+.log-card strong {
+    font-size: 1.05em;
 }

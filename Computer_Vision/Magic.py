@@ -1,10 +1,11 @@
 from . import write_csv
 from . import Read_Cards
-import requests # type: ignore
+import requests 
 import re
 from datetime import datetime
 
 def magic_main():
+    card_counter=0
     write_csv.clear_csv("magic")
     write_csv.create_csv("magic")
 
@@ -15,12 +16,20 @@ def magic_main():
     for s in sets["data"]:
         setlist.append(s["code"])
 
-    for i in range(1, 16):
+    for i in range(1, 15):
+        card_counter+=1
         text=Read_Cards.read(f"test{i}")
         print(text)
         set_code,col_num=isolate_identifier(text,setlist)
         name,color,type,price=get_parameters(set_code, col_num)
         write_csv.append_csv(name,color,type,price)
+        yield {
+            "card_counter": card_counter,
+            "name": name,
+            "color": color,
+            "type": type,
+            "price": price
+        }
 
     return None
 
