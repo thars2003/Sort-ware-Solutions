@@ -1,103 +1,193 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
+    <title>Sort-Ware Solutions</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">  <!-- favicon -->
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">  <!-- CSS file -->
-
+    <link rel="icon" href="{{ url_for('static', filename='logo.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_dark.css') }}">
 </head>
-<!-- <form method="POST" action="/send_data">
-  <div class="toggle-cont">
-      <button type="submit" class="toggle-label">
-          <div class="cont-label-play">
-              <span class="label-play"></span>
-          </div>
-      </button>
-  </div>
 
-  <div class="radio-input">
-      <label><input type="radio" name="parameter" value="Type" checked> Type</label>
-      <label><input type="radio" name="parameter" value="Color"> Color</label>
-      <label><input type="radio" name="parameter" value="Price"> Price</label>
-  </div>
-</form> -->
+<body style="background-image:url('{{ url_for('static', filename='background.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center;">
 
-<body>
-    <div class="flex-container top-row">
-        <section class="flex-child-left"><!-- Start/Pause Button-->
-             <div class="toggle-cont">
-                <!-- <button type="submit" class="toggle-label"></button> -->
-                <input class="toggle-input" id="toggle" name="toggle" type="checkbox" />
-                <label class="toggle-label" for="toggle">
-                    <div class="cont-label-play">
-                    <span class="label-play"></span>
+<div class="main-container">
+<div class="outer-wrapper">
+<div class="container container-5">
+
+    <!-- HEADER / CONTROLS -->
+    <div class="controls-area">
+        <img src="{{ url_for('static', filename='logo.png') }}" class="controls-logo">
+        <h1>Card Sorter</h1>
+
+        <!-- IMPORTANT: no form submit -->
+        <button type="button" class="play-pause-btn" aria-label="Play or Pause">
+            ▶
+        </button>
+    </div>
+
+    <!-- TOP ROW -->
+    <div class="top-row">
+
+        <!-- MTG PANEL -->
+        <div class="container container-1">
+            <h2>Magic the Gathering</h2>
+
+            <div class="param-row">
+                <div class="game-params"></div>
+
+                <img src="{{ url_for('static', filename='mtg_square.png') }}" class="game-image">
+
+                <div class="sort-params">
+                    <h2>Sort By:</h2>
+
+                    <!-- ORIGINAL RADIO STRUCTURE -->
+                    <div class="radio-group">
+                        <label class="radio-container">
+                            <input type="radio" name="sort" value="mtg_price" checked>
+                            <span class="custom-radio"></span>
+                            Price
+                        </label>
+
+                        <label class="radio-container">
+                            <input type="radio" name="sort" value="mtg_color">
+                            <span class="custom-radio"></span>
+                            Color
+                        </label>
+
+                        <label class="radio-container">
+                            <input type="radio" name="sort" value="mtg_type">
+                            <span class="custom-radio"></span>
+                            Type
+                        </label>
                     </div>
-                </label>
                 </div>
-        </section>
-        <section class="flex-child-right"> <!-- Stop Button-->
-            <button class="Btn" id="emergencyBtn">
-                <div class="sign">
-                    <img src="{{ url_for('static', filename='stop.png') }}">
+            </div>
+        </div>
+
+        <!-- SYSTEM STATUS -->
+        <div class="container container-2">
+            <h2>System Status</h2>
+
+            <div class="param-row">
+                <div class="game-params"></div>
+
+                <img src="{{ url_for('static', filename='mtg_poke.jpg') }}" class="game-image">
+
+                <div class="sort-params">
+                    <h2>Sorted Cards:</h2>
                 </div>
-                <div class="text">Emergency Stop</div>
-            </button>
-        </section>
-    </div>
-    <img src="{{ url_for('static', filename='logo.png') }}" class="center_logo">  
-
-      
-    <div class="flex-container bottom-row" style="padding-top: 50px;">
-        <section class="flex-child">
-            <img src="{{ url_for('static', filename='mtg.png') }}" class="center_mtg"> <!-- mtg logo image -->
- 
-            <div class="radio-input" style="padding-bottom: 50px;" class="flex-child"><!-- mtg parameters -->
-                <label class="label">
-                    <input type="radio" id="value-1" checked="" name="value-radio" value="value-1"/>
-                    <p class="text">Type</p>
-                </label>
-                <label class="label">
-                    <input type="radio" id="value-2" name="value-radio" value="value-2" />
-                    <p class="text">Color</p>
-                </label>
-                <label class="label">
-                    <input type="radio" id="value-3" name="value-radio" value="value-3" />
-                    <p class="text">Price</p>
-                </label>
             </div>
-        </section>
-        <section class="flex-child">
-            <img src="{{ url_for('static', filename='pokemon.png') }}"  class="center_pokemon"> <!-- pokemon logo image -->
+        </div>
 
-            <div class="radio-input" style="padding-bottom: 50px;" class="flex-child"><!-- pokemon parameters -->
-                <label class="label">
-                    <input type="radio" id="value-1" checked="" name="value-radio" value="value-1"/>
-                    <p class="text">Type</p>
-                </label>
-                <label class="label">
-                    <input type="radio" id="value-2" name="value-radio" value="value-2" />
-                    <p class="text">Color</p>
-                </label>
-                <label class="label">
-                    <input type="radio" id="value-3" name="value-radio" value="value-3" />
-                    <p class="text">Price</p>
-                </label>
+        <!-- POKEMON PANEL -->
+        <div class="container container-2">
+            <h2>Pokemon</h2>
+
+            <div class="param-row">
+                <div class="game-params"></div>
+
+                <img src="{{ url_for('static', filename='poke_square.png') }}" class="game-image">
+
+                <div class="sort-params">
+                    <h2>Sort By:</h2>
+
+                    <!-- ORIGINAL RADIO STRUCTURE -->
+                    <div class="radio-group">
+                        <label class="radio-container">
+                            <input type="radio" name="sort" value="pokemon_price">
+                            <span class="custom-radio"></span>
+                            Price
+                        </label>
+
+                        <label class="radio-container">
+                            <input type="radio" name="sort" value="pokemon_category">
+                            <span class="custom-radio"></span>
+                            Category
+                        </label>
+
+                        <label class="radio-container">
+                            <input type="radio" name="sort" value="pokemon_type">
+                            <span class="custom-radio"></span>
+                            Type
+                        </label>
+                    </div>
+                </div>
             </div>
-        </section>
+        </div>
+
     </div>
-<script>// Emergency Stop Button Script
-  const emergencyBtn = document.getElementById('emergencyBtn');
-  emergencyBtn.addEventListener('click', function() {
-    // toggle "active" class on each click
-    this.classList.toggle('active');
-  });
+
+    <!-- SYSTEM LOG -->
+    <div class="container container-3">
+        <h2>System Log</h2>
+    <div id="log" class="log-container"></div>
+</div>
+
+</div>
+</div>
+</div>
+
+<script>
+const btn = document.querySelector('.play-pause-btn');
+let eventSource = null;
+
+btn.addEventListener('click', () => {
+    btn.classList.toggle('playing');
+    btn.textContent = btn.classList.contains('playing') ? '⏸' : '▶';
+
+    if (btn.classList.contains('playing')) {
+        startStream();
+    } else {
+        stopStream();
+    }
+});
+
+function getSelectedSort() {
+    const selected = document.querySelector('input[name="sort"]:checked');
+    return selected ? selected.value : "";
+}
+
+function startStream() {
+    const log = document.getElementById("log");
+    log.innerHTML = "";
+
+    const sort = getSelectedSort();
+    eventSource = new EventSource(`/stream?sort=${sort}`);
+
+    eventSource.onmessage = (event) => {
+        const card = JSON.parse(event.data);
+
+        const div = document.createElement("div");
+        div.className = "log-card";
+
+       div.innerHTML = `
+            <div class="log-row">
+                <div class="log-left">
+                    <strong>${card.card_counter}. ${card.name}</strong><br>
+                    ${card.subtype}: ${card.subtype_value} | Type: ${card.type} | Price: $${card.price}
+                </div>
+                <div class="log-right">
+                    <strong></strong><br>
+                    ${card.sort_by}: ${card.sort_value}
+                </div>
+            </div>
+        `;
+        log.appendChild(div);
+
+        // Optional: auto-scroll to bottom
+        log.scrollTop = log.scrollHeight;
+    };
+
+    eventSource.onerror = () => stopStream();
+}
+function stopStream() {
+    if (eventSource) {
+        eventSource.close();
+        eventSource = null;
+    }
+}
 </script>
-
-
 
 </body>
 </html>
-

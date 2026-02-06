@@ -1,15 +1,5 @@
 Name,magic
-Avaricious Dragon,['R'],Creature — Dragon,0.97
-Davriel's Shadowfugue,['B'],Sorcery,0.10
-Esquire of the King,['W'],Creature — Human Soldier,0.03
-Rite of Replication,['U'],Sorcery,0.50
-Timberland Ancient,['G'],Creature — Treefolk,0.06
-Timberland Ancient,['G'],Creature — Treefolk,0.06
-unknown,unknown,unknown,unknown
-On Serra's Wings,['W'],Legendary Enchantment — Aura,0.28
-"Danitha Capashen, Paragon",['W'],Legendary Creature — Human Knight,0.33
-Rogue's Passage,[],Land,0.33
-Rosie Cotton of South Lane,['W'],Legendary Creature — Halfling Peasant,0.16
-Pain // Suffering,"['B', 'R']",Sorcery // Sorcery,0.05
-Grand Entryway // Elegant Rotunda,['W'],Enchantment — Room // Enchantment — Room,0.06
-Forest,['G'],Basic Land — Forest,0.11
+"Danitha Capashen, Paragon",White,Legendary Creature,0.33
+Futurist Operative,Blue,Creature,0.04
+Expedite,Red,Instant,0.74
+Ironclad Slayer,White,Creature,0.16

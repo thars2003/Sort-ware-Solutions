@@ -1,38 +1,91 @@
 from . import write_csv
-from . import Read_Cards
+from . import magic_read_cards
 import requests 
 import re
 from datetime import datetime
 
-def magic_main():
-    card_counter=0
+def magic_main(sort_by):
     write_csv.clear_csv("magic")
     write_csv.create_csv("magic")
 
     setlist=[]
+    card_counter=0
     url = f"https://api.scryfall.com/sets"
     response = requests.get(url)
     sets = response.json()
     for s in sets["data"]:
         setlist.append(s["code"])
 
-    for i in range(1, 15):
+    for i in range(1, 5):
         card_counter+=1
-        text=Read_Cards.read(f"test{i}")
-        print(text)
+        text=magic_read_cards.read(f"cam{i}")
+        #print(text)
         set_code,col_num=isolate_identifier(text,setlist)
+        print(set_code,col_num)
         name,color,type,price=get_parameters(set_code, col_num)
+
+        if len(color) > 1:
+            color="Multicolor"
+        elif len(color) == 0:
+            color="Color-Less"
+        elif "U" in color:
+            color="Blue"
+        elif "W" in color:
+            color="White"
+        elif "R" in color:
+            color="Red"
+        elif "B" in color:
+            color="Black"
+        elif "G" in color:
+            color="Green"
+
+        type= type.split("—", 1)[0].strip()
+
         write_csv.append_csv(name,color,type,price)
-        yield {
-            "card_counter": card_counter,
-            "name": name,
-            "color": color,
-            "type": type,
-            "price": price
-        }
+        if sort_by=="mtg_price":
+            yield from magic_price(name,color,type,price,card_counter)
+        elif sort_by=="mtg_color":
+            yield from magic_color(name,color,type,price,card_counter)
+        elif sort_by=="mtg_type":
+            yield from magic_type(name,color,type,price,card_counter)    
+        
 
     return None
 
+def magic_price(name,color,type,price,card_counter):
+    yield {
+            "card_counter": card_counter,
+            "name": name,
+            "subtype": "Color",
+            "subtype_value": color,
+            "type": type,
+            "price": price,
+            "sort_by": "Price",
+            "sort_value": f"${price}"
+        }
+def magic_color(name,color,type,price,card_counter):
+    yield {
+            "card_counter": card_counter,
+            "name": name,
+            "subtype": "Color",
+            "subtype_value": color,
+            "type": type,
+            "price": price,
+            "sort_by": "Color",
+            "sort_value": color
+        }
+def magic_type(name,color,type,price,card_counter):
+    yield {
+            "card_counter": card_counter,
+            "name": name,
+            "subtype": "Color",
+            "subtype_value": color,
+            "type": type,
+            "price": price,
+            "sort_by": "Type",
+            "sort_value": type
+        }
+    
 def isolate_identifier(text,setlist, debug=False):
 
     set_code= "unknown"

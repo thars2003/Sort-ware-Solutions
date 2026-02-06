@@ -276,3 +276,23 @@ p, li {
 .log-card strong {
     font-size: 1.05em;
 }
+.log-row {
+    display: flex;
+    justify-content: space-between; /* pushes right side over */
+    align-items: flex-start;
+    width: 100%;
+}
+
+.log-left {
+    text-align: left;
+}
+
+.log-right {
+    text-align: right;
+    font-size: 1em;      /* same base size as normal text */
+    font-weight: normal; /* remove bold look */
+    background: none;    /* remove badge background */
+    padding: 0;          /* remove extra spacing */
+    border-radius: 0;
+    white-space: nowrap; /* keeps it on one line */
+}
