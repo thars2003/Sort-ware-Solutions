@@ -8,7 +8,7 @@ import numpy as np
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SCANNED_DIR = os.path.join(BASE_DIR, "Scanned_Cards")
 
-img_path = os.path.join(SCANNED_DIR, "cam5.jpg")
+img_path = os.path.join(SCANNED_DIR, "poke1.jpg")
 img = cv2.imread(img_path)
 
 if img is None:
@@ -17,7 +17,7 @@ if img is None:
 
 
 def read(i):
-    filename = f"cam{i}.jpg"  # adjust extension if needed
+    filename = f"poke{i}.jpg"  # adjust extension if needed
     img_path = os.path.join(SCANNED_DIR, filename)
 
     img = cv2.imread(img_path)

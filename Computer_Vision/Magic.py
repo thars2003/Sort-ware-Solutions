@@ -16,15 +16,15 @@ def magic_main(sort_by):
     for s in sets["data"]:
         setlist.append(s["code"])
 
-    for i in range(1, 5):
+    for i in range(1, 11):
         card_counter+=1
-        text=magic_read_cards.read(f"cam{i}")
+        text=magic_read_cards.read(f"mtg{i}")
         #print(text)
         set_code,col_num=isolate_identifier(text,setlist)
         print(set_code,col_num)
         name,color,type,price=get_parameters(set_code, col_num)
 
-        if len(color) > 1:
+        if len(set(color)) > 1:
             color="Multicolor"
         elif len(color) == 0:
             color="Color-Less"

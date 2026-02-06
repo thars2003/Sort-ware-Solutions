@@ -9,10 +9,11 @@ def pokemon_main(sort_by):
     write_csv.create_csv("pokemon")
 
     card_counter=0
-    for i in range(5, 9):
+    for i in range(1, 11):
         card_counter+=1
         text=poke_read_cards.read(i)
         col_num=isolate_identifier(text)
+        print(col_num)
         name,category,type,price=get_parameters("swsh11", col_num)
         write_csv.append_csv(name,category,type,price)
 
