@@ -67,17 +67,74 @@
 
         <!-- SYSTEM STATUS -->
         <div class="container container-2">
-            <h2>System Status</h2>
+            <h2>Bin Status</h2>
+            <div class="bin-container" id="binStatus">
 
-            <div class="param-row">
-                <div class="game-params"></div>
+                    <div class="bin-card" id="binCard1">
+                        <div class="log-row">
+                            <div class="log-left"><strong>Bin 1</strong></div>
+                            <div class="log-right"><span id="bin1">0</span></div>
+                        </div>
+                    </div>
 
-                <img src="{{ url_for('static', filename='mtg_poke.jpg') }}" class="game-image">
+                    <div class="bin-card" id="binCard2">
+                        <div class="log-row">
+                            <div class="log-left"><strong>Bin 2</strong></div>
+                            <div class="log-right"><span id="bin2">0</span></div>
+                        </div>
+                    </div>
 
-                <div class="sort-params">
-                    <h2>Sorted Cards:</h2>
+                    <div class="bin-card" id="binCard3">
+                        <div class="log-row">
+                            <div class="log-left"><strong>Bin 3</strong></div>
+                            <div class="log-right"><span id="bin3">0</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bin-card" id="binCard4">
+                        <div class="log-row">
+                            <div class="log-left"><strong>Bin 4</strong></div>
+                            <div class="log-right"><span id="bin4">0</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bin-card" id="binCard5">
+                        <div class="log-row">
+                            <div class="log-left"><strong>Bin 5</strong></div>
+                            <div class="log-right"><span id="bin5">0</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bin-card" id="binCard6">
+                        <div class="log-row">
+                            <div class="log-left"><strong>Bin 6</strong></div>
+                            <div class="log-right"><span id="bin6">0</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bin-card" id="binCard7">
+                        <div class="log-row">
+                            <div class="log-left"><strong>Bin 7</strong></div>
+                            <div class="log-right"><span id="bin7">0</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bin-card" id="binCard8">
+                        <div class="log-row">
+                            <div class="log-left"><strong>Bin 8</strong></div>
+                            <div class="log-right"><span id="bin8">0</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bin-card" id="binCard9">
+                        <div class="log-row">
+                            <div class="log-left"><strong>Bin 9</strong></div>
+                            <div class="log-right"><span id="bin9">0</span></div>
+                        </div>
+                    </div>
+
                 </div>
-            </div>
+
         </div>
 
         <!-- POKEMON PANEL -->
@@ -143,6 +200,20 @@ btn.addEventListener('click', () => {
     }
 });
 
+function updateBins(binMapping, activeBin) {
+    binMapping.forEach((count, index) => {
+        const binNum = index + 1;
+        const countEl = document.getElementById(`bin${binNum}`);
+        const cardEl = document.getElementById(`binCard${binNum}`);
+
+        if (countEl) countEl.textContent = count;
+
+        if (cardEl) {
+            cardEl.classList.toggle("active-bin", binNum === activeBin);
+        }
+    });
+}
+
 function getSelectedSort() {
     const selected = document.querySelector('input[name="sort"]:checked');
     return selected ? selected.value : "";
@@ -161,7 +232,7 @@ function startStream() {
         const div = document.createElement("div");
         div.className = "log-card";
 
-       div.innerHTML = `
+        div.innerHTML = `
             <div class="log-row">
                 <div class="log-left">
                     <strong>${card.card_counter}. ${card.name}</strong><br>
@@ -169,7 +240,7 @@ function startStream() {
                 </div>
                 <div class="log-right">
                     <strong></strong><br>
-                    ${card.sort_by}: ${card.sort_value}
+                    ${card.sort_by}: ${card.sort_value} | Assigned Bin: ${card.bin}
                 </div>
             </div>
         `;
@@ -177,9 +248,23 @@ function startStream() {
 
         // Optional: auto-scroll to bottom
         log.scrollTop = log.scrollHeight;
+
+        if (card.bin_mapping) {
+        updateBins(card.bin_mapping, card.bin);
+        }
     };
 
     eventSource.onerror = () => stopStream();
+}
+function updateBins(binMapping, activeBin) {
+    binMapping.forEach((count, index) => {
+        const binNum = index + 1;
+        const el = document.getElementById(`bin${binNum}`);
+        if (el) {
+            el.textContent = count;
+            el.parentElement.classList.toggle("active-bin", binNum === activeBin);
+        }
+    });
 }
 function stopStream() {
     if (eventSource) {

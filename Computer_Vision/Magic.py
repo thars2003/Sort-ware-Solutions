@@ -1,11 +1,14 @@
 from . import write_csv
 from . import magic_read_cards
+from . import Bin_Movement
+from . import stream
 import requests 
 import re
 from datetime import datetime
 
+bin_mapping= [0]*9
+
 def magic_main(sort_by):
-    write_csv.clear_csv("magic")
     write_csv.create_csv("magic")
 
     setlist=[]
@@ -53,39 +56,128 @@ def magic_main(sort_by):
     return None
 
 def magic_price(name,color,type,price,card_counter):
-    yield {
-            "card_counter": card_counter,
-            "name": name,
-            "subtype": "Color",
-            "subtype_value": color,
-            "type": type,
-            "price": price,
-            "sort_by": "Price",
-            "sort_value": f"${price}"
-        }
+    global bin_mapping
+
+    if price=="unknown":
+        bin_mapping[8]=bin_mapping[8]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Price", "unknown",9,bin_mapping)
+        Bin_Movement.move_bin9()
+    elif float(price) < 0.25:
+        bin_mapping[0]=bin_mapping[0]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Price", f"${price}",1,bin_mapping)
+        Bin_Movement.move_bin1()
+    elif 0.25 <= float(price) < 1:
+        bin_mapping[1]=bin_mapping[1]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Price", f"${price}",2,bin_mapping)
+        Bin_Movement.move_bin2()
+    elif 1 <= float(price) <2.5:
+        bin_mapping[2]=bin_mapping[2]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Price", f"${price}",3,bin_mapping)
+        Bin_Movement.move_bin3()
+    elif 2.5 <= float(price) <5:
+        bin_mapping[3]=bin_mapping[3]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Price", f"${price}",4,bin_mapping)
+        Bin_Movement.move_bin4()
+    elif 5 <= float(price) <10:
+        bin_mapping[4]=bin_mapping[4]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Price", f"${price}",5,bin_mapping)
+        Bin_Movement.move_bin5()
+    elif 10 <= float(price) <20:
+        bin_mapping[5]=bin_mapping[5]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Price", f"${price}",6,bin_mapping)
+        Bin_Movement.move_bin6()
+    elif 20 <= float(price) <50:
+        bin_mapping[6]=bin_mapping[6]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Price", f"${price}",7,bin_mapping)
+        Bin_Movement.move_bin7()
+    elif float(price) >= 50:
+        bin_mapping[7]=bin_mapping[7]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Price", f"${price}",8,bin_mapping)
+        Bin_Movement.move_bin8()
+
 def magic_color(name,color,type,price,card_counter):
-    yield {
-            "card_counter": card_counter,
-            "name": name,
-            "subtype": "Color",
-            "subtype_value": color,
-            "type": type,
-            "price": price,
-            "sort_by": "Color",
-            "sort_value": color
-        }
+    global bin_mapping
+    if color=="unknown":
+        bin_mapping[8]=bin_mapping[8]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Color", color,9,bin_mapping)
+        Bin_Movement.move_bin9()
+    elif color=="White":
+        bin_mapping[0]=bin_mapping[0]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Color", color,1,bin_mapping)
+        Bin_Movement.move_bin1()
+    elif color=="Blue":
+        bin_mapping[1]=bin_mapping[1]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Color", color,2,bin_mapping)
+        Bin_Movement.move_bin2()
+    elif color=="Black":
+        bin_mapping[2]=bin_mapping[2]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Color", color,3,bin_mapping)
+        Bin_Movement.move_bin3()
+    elif color=="Red":
+        bin_mapping[3]=bin_mapping[3]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Color", color,4,bin_mapping)
+        Bin_Movement.move_bin4()
+    elif color=="Green":
+        bin_mapping[4]=bin_mapping[4]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Color", color,5,bin_mapping)
+        Bin_Movement.move_bin5()
+    elif color=="Multicolor":
+        bin_mapping[5]=bin_mapping[5]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Color", color,6,bin_mapping)
+        Bin_Movement.move_bin6()
+    elif color=="Color-Less":
+        bin_mapping[6]=bin_mapping[6]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Color", color,7,bin_mapping)
+        Bin_Movement.move_bin7()
+
+    # BIN 8 is empty for maybe extra multicolor 
+
 def magic_type(name,color,type,price,card_counter):
-    yield {
-            "card_counter": card_counter,
-            "name": name,
-            "subtype": "Color",
-            "subtype_value": color,
-            "type": type,
-            "price": price,
-            "sort_by": "Type",
-            "sort_value": type
-        }
-    
+   
+    global bin_mapping
+
+    if type=="unknown":
+        bin_mapping[8]=bin_mapping[8]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Type", type,9,bin_mapping)
+        Bin_Movement.move_bin9()
+    elif type=="Creature":
+        bin_mapping[0]=bin_mapping[0]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Type", type,1,bin_mapping)
+        Bin_Movement.move_bin1()
+    elif type=="Artifact":
+        bin_mapping[1]=bin_mapping[1]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Type", type,2,bin_mapping)
+        Bin_Movement.move_bin2()
+    elif type=="Enchantment":
+        bin_mapping[2]=bin_mapping[2]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Type", type,3,bin_mapping)
+        Bin_Movement.move_bin3()
+    elif type=="Instant":
+        bin_mapping[3]=bin_mapping[3]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Type", type,4,bin_mapping)
+        Bin_Movement.move_bin4()
+    elif type=="Sorcery":
+        bin_mapping[4]=bin_mapping[4]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Type", type,5,bin_mapping)
+        Bin_Movement.move_bin5()
+    elif type=="Land":
+        bin_mapping[5]=bin_mapping[5]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Type", type,6,bin_mapping)
+        Bin_Movement.move_bin6()
+    elif type=="Planeswalker":
+        bin_mapping[6]=bin_mapping[6]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Type", type,7,bin_mapping)
+        Bin_Movement.move_bin7()
+    elif type=="Battle":
+        bin_mapping[7]=bin_mapping[7]+1
+        yield from stream.live_log(card_counter, name, color, type, price, "Type", type,8,bin_mapping)
+        Bin_Movement.move_bin8()
+   
+
+
+
+###### HELPER FUNCTIONS #####
+
 def isolate_identifier(text,setlist, debug=False):
 
     set_code= "unknown"

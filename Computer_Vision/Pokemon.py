@@ -5,7 +5,6 @@ import re
 from datetime import datetime
 
 def pokemon_main(sort_by):
-    write_csv.clear_csv("pokemon")
     write_csv.create_csv("pokemon")
 
     card_counter=0

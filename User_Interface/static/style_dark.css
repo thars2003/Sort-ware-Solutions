@@ -296,3 +296,45 @@ p, li {
     border-radius: 0;
     white-space: nowrap; /* keeps it on one line */
 }
+
+.bin-container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;   /* two columns */
+    gap: 10px;
+    padding: 10px;
+}
+#binCard1 { grid-row: 1; grid-column: 1; }
+#binCard2 { grid-row: 2; grid-column: 1; }
+#binCard3 { grid-row: 3; grid-column: 1; }
+#binCard4 { grid-row: 4; grid-column: 1; }
+#binCard5 { grid-row: 5; grid-column: 1; }
+
+#binCard6 { grid-row: 1; grid-column: 2; }
+#binCard7 { grid-row: 2; grid-column: 2; }
+#binCard8 { grid-row: 3; grid-column: 2; }
+#binCard9 { grid-row: 4; grid-column: 2; }
+
+
+.bin-card {
+    padding: 8px 12px;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-left: 3px solid rgb(87, 0, 0);
+    border-radius: 4px;
+    line-height: 1.4;
+    width: 100%;
+    box-sizing: border-box;
+    transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.bin-card:hover {
+    box-shadow:
+        0 0 10px rgba(87, 0, 0, 0.9),
+        0 0 15px rgba(255, 0, 0, 0.3);
+}
+.active-bin {
+    box-shadow:
+        0 0 12px rgba(87, 0, 0, 0.8),
+        0 0 20px rgba(87, 0, 0, 0.5);
+    border-left-color:rgb(87, 0, 0);
+}
