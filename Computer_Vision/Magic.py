@@ -57,6 +57,8 @@ def magic_main(sort_by):
 
 def magic_price(name,color,type,price,card_counter):
     global bin_mapping
+    if card_counter==1:
+        bin_mapping= [0]*9
 
     if price=="unknown":
         bin_mapping[8]=bin_mapping[8]+1
@@ -97,6 +99,9 @@ def magic_price(name,color,type,price,card_counter):
 
 def magic_color(name,color,type,price,card_counter):
     global bin_mapping
+    if card_counter==1:
+        bin_mapping= [0]*9
+    
     if color=="unknown":
         bin_mapping[8]=bin_mapping[8]+1
         yield from stream.live_log(card_counter, name, color, type, price, "Color", color,9,bin_mapping)
@@ -133,9 +138,10 @@ def magic_color(name,color,type,price,card_counter):
     # BIN 8 is empty for maybe extra multicolor 
 
 def magic_type(name,color,type,price,card_counter):
-   
     global bin_mapping
-
+    if card_counter==1:
+        bin_mapping= [0]*9
+        
     if type=="unknown":
         bin_mapping[8]=bin_mapping[8]+1
         yield from stream.live_log(card_counter, name, color, type, price, "Type", type,9,bin_mapping)
