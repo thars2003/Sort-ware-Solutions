@@ -29,7 +29,7 @@ import lgpio
 import time
 
 class A4988StepperMotor:
-    def __init__(self, step_pin=4, dir_pin=17, enable_pin=22, steps_per_rev=200):
+    def __init__(self, step_pin=22 dir_pin=10, enable_pin=27, steps_per_rev=200):
         """
         Initialize the A4988 stepper motor controller
         
