@@ -1,8 +1,12 @@
+from turtle import color
 from . import write_csv
 from . import poke_read_cards
 import requests # type: ignore
 import re
 from datetime import datetime
+from . import Bin_Movement
+from . import stream
+bin_mapping= [0]*9
 
 def pokemon_main(sort_by):
     write_csv.create_csv("pokemon")
@@ -26,38 +30,120 @@ def pokemon_main(sort_by):
     return None
 
 def pokemon_price(name,category,type,price,card_counter):
-    yield {
-            "card_counter": card_counter,
-            "name": name,
-            "subtype": "Category",
-            "subtype_value": category,
-            "type": type,
-            "price": price,
-            "sort_by": "Price",
-            "sort_value": f"${price}"
-        }
+    global bin_mapping
+    if card_counter==1:
+        bin_mapping= [0]*9
+
+    if price=="unknown":
+        bin_mapping[8]=bin_mapping[8]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Price", "unknown",9,bin_mapping)
+        Bin_Movement.move_bin9()
+    elif float(price) < 0.25:
+        bin_mapping[0]=bin_mapping[0]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Price", f"${price}",1,bin_mapping)
+        Bin_Movement.move_bin1()
+    elif 0.25 <= float(price) < 1:
+        bin_mapping[1]=bin_mapping[1]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Price", f"${price}",2,bin_mapping)
+        Bin_Movement.move_bin2()
+    elif 1 <= float(price) <2.5:
+        bin_mapping[2]=bin_mapping[2]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Price", f"${price}",3,bin_mapping)
+        Bin_Movement.move_bin3()
+    elif 2.5 <= float(price) <5:
+        bin_mapping[3]=bin_mapping[3]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Price", f"${price}",4,bin_mapping)
+        Bin_Movement.move_bin4()
+    elif 5 <= float(price) <10:
+        bin_mapping[4]=bin_mapping[4]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Price", f"${price}",5,bin_mapping)
+        Bin_Movement.move_bin5()
+    elif 10 <= float(price) <20:
+        bin_mapping[5]=bin_mapping[5]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Price", f"${price}",6,bin_mapping)
+        Bin_Movement.move_bin6()
+    elif 20 <= float(price) <50:
+        bin_mapping[6]=bin_mapping[6]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Price", f"${price}",7,bin_mapping)
+        Bin_Movement.move_bin7()
+    elif float(price) >= 50:
+        bin_mapping[7]=bin_mapping[7]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Price", f"${price}",8,bin_mapping)
+        Bin_Movement.move_bin8()
 def pokemon_category(name,category,type,price,card_counter):
-    yield {
-            "card_counter": card_counter,
-            "name": name,
-            "subtype": "Category",
-            "subtype_value": category,
-            "type": type,
-            "price": price,
-            "sort_by": "Category",
-            "sort_value": category
-        }
-def pokemon_type(name,category,type,price,card_counter):
-    yield {
-            "card_counter": card_counter,
-            "name": name,
-            "subtype": "Category",
-            "subtype_value": category,
-            "type": type,
-            "price": price,
-            "sort_by": "Type",
-            "sort_value": type
-        }
+    global bin_mapping
+    if card_counter==1:
+        bin_mapping= [0]*9
+    
+    if category=="unknown":
+        bin_mapping[8]=bin_mapping[8]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Category", category,9,bin_mapping)
+        Bin_Movement.move_bin9()
+    elif category=="Pokemon":
+        bin_mapping[0]=bin_mapping[0]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Category", category,1,bin_mapping)
+        Bin_Movement.move_bin1()
+    elif category=="Item":
+        bin_mapping[1]=bin_mapping[1]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Category", category,2,bin_mapping)
+        Bin_Movement.move_bin2()
+    elif category=="Supporter":
+        bin_mapping[2]=bin_mapping[2]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Category", category,3,bin_mapping)
+        Bin_Movement.move_bin3()
+    elif category=="Stadium":
+        bin_mapping[3]=bin_mapping[3]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Category", category,4,bin_mapping)
+        Bin_Movement.move_bin4()
+    elif category=="null":
+        bin_mapping[4]=bin_mapping[4]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Category", category,5,bin_mapping)
+        Bin_Movement.move_bin5()
+
+    # BIN 6,7,8 is empty for maybe overflow and unknown categories
+
+def pokemon_type(name,category,type,price,card_counter): #grass, fire, water, lightning, psychic, fighting, darkness, colorless
+    global bin_mapping
+    if card_counter==1:
+        bin_mapping= [0]*9
+        
+    if type=="unknown" or type == "Metal" or type == "Fairy" or type == "Dragon" or type == "null":
+        bin_mapping[8]=bin_mapping[8]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Type", type,9,bin_mapping)
+        Bin_Movement.move_bin9()
+    elif type=="Grass":
+        bin_mapping[0]=bin_mapping[0]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Type", type,1,bin_mapping)
+        Bin_Movement.move_bin1()
+    elif type=="Fire":
+        bin_mapping[1]=bin_mapping[1]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Type", type,2,bin_mapping)
+        Bin_Movement.move_bin2()
+    elif type=="Water":
+        bin_mapping[2]=bin_mapping[2]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Type", type,3,bin_mapping)
+        Bin_Movement.move_bin3()
+    elif type=="Lightning":
+        bin_mapping[3]=bin_mapping[3]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Type", type,4,bin_mapping)
+        Bin_Movement.move_bin4()
+    elif type=="Psychic":
+        bin_mapping[4]=bin_mapping[4]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Type", type,5,bin_mapping)
+        Bin_Movement.move_bin5()
+    elif type=="Fighting":
+        bin_mapping[5]=bin_mapping[5]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Type", type,6,bin_mapping)
+        Bin_Movement.move_bin6()
+    elif type=="Darkness":
+        bin_mapping[6]=bin_mapping[6]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Type", type,7,bin_mapping)
+        Bin_Movement.move_bin7()
+    elif type=="Colorless":
+        bin_mapping[7]=bin_mapping[7]+1
+        yield from stream.live_log(card_counter, name, category, type, price, "Type", type,8,bin_mapping)
+        Bin_Movement.move_bin8()
+   
 
 def isolate_identifier(text):
     match = re.search(r'(\d{1,3})/(\d{3})', text)
@@ -75,16 +161,19 @@ def get_parameters(set_code, col_num):
     card_info = response.json()
     name = card_info.get("name")
 
-    # Category (Pokemon, Trainer, Energy)
+
     category = card_info.get("category")
+    # Category (Pokemon, Trainer, Energy)
+    if category == "Pokemon":
+        None  # pick first type
+    elif category == "Trainer":
+        category = card_info.get("trainerType")       # Item, Supporter, Stadium
+    else:
+        category = "Unknown"
 
     # Determine type
-    if category == "Pokemon":
-        type = card_info.get("types", [None])[0]  # pick first type
-    elif category == "Trainer":
-        type = card_info.get("trainerType")       # Item, Supporter, Stadium
-    else:
-        type = "Unknown"
+    type = card_info.get("types", [None])[0]  # pick first type
+  
 
     # Price in USD from TCGplayer
     price = None

@@ -27,5 +27,5 @@ def stream():
 
 
 if __name__ == "__main__":
-    # pipapp.run(debug=True, threaded=True)
-    app.run(host='10.248.14.33', port=5000)
+    app.run(debug=True, threaded=True)
+    #app.run(host='0.0.0.0', port=5000)
