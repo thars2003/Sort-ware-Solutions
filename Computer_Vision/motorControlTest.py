@@ -4,16 +4,16 @@ A4988 Stepper Motor Driver Controller for Raspberry Pi 5
 Controls a NEMA 17 stepper motor using GPIO pins
 
 GPIO Pin Configuration:
-- GPIO 4:  STEP (controls motor steps)
-- GPIO 17: DIR (controls direction)
-- GPIO 22: ENABLE (enables/disables motor driver)
+- GPIO 22: STEP (controls motor steps)
+- GPIO 10: DIR (controls direction)
+- GPIO 27: ENABLE (enables/disables motor driver)
 
 Wiring Guide:
 A4988 Pin -> Connection
 --------------------------
-STEP      -> GPIO 4
-DIR       -> GPIO 17
-ENABLE    -> GPIO 22
+STEP      -> GPIO 22
+DIR       -> GPIO 10
+ENABLE    -> GPIO 27
 MS1       -> GND (for full step mode)
 MS2       -> GND (for full step mode)
 MS3       -> GND (for full step mode)
@@ -29,7 +29,7 @@ import lgpio
 import time
 
 class A4988StepperMotor:
-    def __init__(self, step_pin=22 dir_pin=10, enable_pin=27, steps_per_rev=200):
+    def __init__(self, step_pin=22, dir_pin=10, enable_pin=27, steps_per_rev=200):
         """
         Initialize the A4988 stepper motor controller
         
@@ -145,7 +145,7 @@ def main():
     """Example usage of the stepper motor controller"""
     
     # Create motor instance
-    motor = A4988StepperMotor(step_pin=4, dir_pin=17, enable_pin=22)
+    motor = A4988StepperMotor(step_pin=22, dir_pin=10, enable_pin=27)
     
     try:
         # Enable the motor
@@ -164,6 +164,7 @@ def main():
         
         # Example 3: Rotate 90 degrees clockwise
         print("\n--- Example 3: 90 degrees CW ---")
+        
         motor.rotate_degrees(degrees=90, rpm=60, clockwise=True)
         time.sleep(1)
         
