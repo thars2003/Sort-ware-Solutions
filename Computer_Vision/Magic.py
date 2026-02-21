@@ -143,7 +143,7 @@ def magic_type(name,color,type,price,card_counter):
     if type=="unknown":
         bin_mapping[8]=bin_mapping[8]+1
         yield from stream.live_log(card_counter, name, color, type, price, "Type", type,9,bin_mapping)
-        Bin_Movement.move_bin(9))
+        Bin_Movement.move_bin(9)
     elif type=="Creature":
         bin_mapping[0]=bin_mapping[0]+1
         yield from stream.live_log(card_counter, name, color, type, price, "Type", type,1,bin_mapping)
