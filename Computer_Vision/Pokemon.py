@@ -71,6 +71,7 @@ def pokemon_price(name,category,type,price,card_counter):
         bin_mapping[7]=bin_mapping[7]+1
         yield from stream.live_log(card_counter, name, category, type, price, "Price", f"${price}",8,bin_mapping)
         Bin_Movement.move_bin(8)
+        
 def pokemon_category(name,category,type,price,card_counter):
     global bin_mapping
     if card_counter==1:
