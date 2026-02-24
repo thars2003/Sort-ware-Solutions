@@ -1,7 +1,11 @@
 from flask import Flask, render_template, Response, request, json
 from Computer_Vision import Magic, Pokemon
-
+from Computer_Vision import Led
 app = Flask(__name__)
+
+@app.before_first_request
+def start_led():
+    Led.run() 
 
 @app.route("/")
 def home():

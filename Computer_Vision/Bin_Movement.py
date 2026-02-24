@@ -26,10 +26,6 @@ class A4988StepperMotor:
         time.sleep(0.001)  # Small delay for direction to settle
     
     def step(self, steps, delay=0.005, clockwise=True):
-<<<<<<< HEAD
-=======
-        
->>>>>>> master
         self.set_direction(clockwise)
         
         for _ in range(steps):
