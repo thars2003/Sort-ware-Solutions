@@ -34,7 +34,7 @@ def clear():
     pixels.fill((0, 0, 0))
     pixels.show()
 
-def show():
+def show(): 
     pixels.show()
 
 # ==========================
@@ -71,7 +71,7 @@ while True:
 ###### RAINBOW LED #######
 
 
-# import time
+# import timecd 
 # import board
 # import neopixel
 # import colorsys
