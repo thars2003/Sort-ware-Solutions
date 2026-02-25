@@ -4,7 +4,7 @@ import time
 import atexit
 
 NUM_BINS = 9
-REV_PER_BIN = 1  # Revolutions per bin
+REV_PER_BIN = 1.0  # Revolutions per bin
 current_bin = 1  # Track current bin
 
 _motor_instance = None  # Singleton motor instance
@@ -23,7 +23,7 @@ class A4988StepperMotor:
 
     def set_direction(self, clockwise=True):
         lgpio.gpio_write(self.h, self.DIR_PIN, 1 if clockwise else 0)
-        time.sleep(0.001)  # Small delay for direction to settle
+        time.sleep(0.01)  # Small delay for direction to settle
     
     def step(self, steps, delay=0.005, clockwise=True):
         self.set_direction(clockwise)
@@ -34,7 +34,7 @@ class A4988StepperMotor:
             lgpio.gpio_write(self.h, self.STEP_PIN, 0)
             time.sleep(delay)
     
-    def rotate(self, revolutions, rpm=30, clockwise=True):
+    def rotate(self, revolutions, rpm=60, clockwise=True):
     
         steps = int(revolutions * self.steps_per_rev)
         delay = 60.0 / (rpm * self.steps_per_rev * 2)
@@ -64,7 +64,7 @@ def move_bin(target_bin):
 
 def step_clockwise(motor):
     global current_bin
-    motor.rotate(REV_PER_BIN, rpm=40, clockwise=True)
+    motor.rotate(REV_PER_BIN, rpm=60, clockwise=True)
     current_bin += 1
     if current_bin > NUM_BINS:
         current_bin = 1
@@ -72,7 +72,7 @@ def step_clockwise(motor):
 
 def step_counterclockwise(motor):
     global current_bin
-    motor.rotate(REV_PER_BIN, rpm=40, clockwise=False)
+    motor.rotate(REV_PER_BIN, rpm=60, clockwise=False)
     current_bin -= 1
     if current_bin < 1:
         current_bin = NUM_BINS

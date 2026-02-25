@@ -144,7 +144,7 @@ def main():
         
         # Example 2: Rotate 1 full revolution counter-clockwise at 20 RPM
         print("\n--- Example 2: 1 revolution CCW at 20 RPM ---")
-        motor.rotate(revolutions=1, rpm=30, clockwise=False)
+        motor.rotate(revolutions=1, rpm=30, clockwise=True)
         time.sleep(1)
 
         # Example 3: Rotate 90 degrees clockwise
