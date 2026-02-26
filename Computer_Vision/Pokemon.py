@@ -1,11 +1,11 @@
 from turtle import color
-from . import write_csv
-from . import poke_read_cards
+import write_csv
+import poke_read_cards
 import requests # type: ignore
 import re
 from datetime import datetime
-from . import Bin_Movement
-from . import stream
+import Bin_Movement
+import stream
 bin_mapping= [0]*9
 
 
