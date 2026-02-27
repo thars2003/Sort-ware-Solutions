@@ -1,10 +1,18 @@
-import write_csv
-import magic_read_cards
-import Bin_Movement
-import stream
+from . import write_csv
+from . import magic_read_cards
+from . import Bin_Movement
+from . import stream
 import requests 
 import re
 from datetime import datetime
+
+# import write_csv
+# import magic_read_cards
+# import Bin_Movement
+# import stream
+# import requests 
+# import re
+# from datetime import datetime
 
 bin_mapping= [0]*9
 

@@ -47,10 +47,10 @@ if choice=="2":
 elif choice == "1":
     text = magic_read_cards.read("demo1")
     full_text = " ".join(text)
-    print(text)
-    print(full_text)
+    #print(text)
+    #print(full_text)
     col_num= Pokemon.isolate_identifier(full_text)
-    print(col_num)
+    #print(col_num)
     name, category, type, price= Pokemon.get_parameters("swsh11", col_num)
     print (name, category, type, price)
 

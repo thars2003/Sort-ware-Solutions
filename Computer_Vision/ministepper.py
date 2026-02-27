@@ -96,7 +96,7 @@ def main():
     
     # CONFIGURATION
     REVERSE = True  # Change to True to reverse direction
-    RPM = 30         # Change this to adjust speed (5-60 typical range)
+    RPM = 50         # Change this to adjust speed (5-60 typical range)
     
     print(f"Configuration:")
     print(f"  Direction: {'REVERSED' if REVERSE else 'NORMAL'}")
