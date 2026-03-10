@@ -1,7 +1,7 @@
 import cv2
 import requests
 import Led
-import magic_read_cards 
+import Computer_Vision.read_cards as read_cards 
 import Magic
 import Pokemon
 
@@ -37,7 +37,7 @@ if choice=="2":
     for s in sets["data"]:
         setlist.append(s["code"])
 
-    text = magic_read_cards.read("demo1")
+    text = read_cards.read("demo1")
 
     set_code, col_num= Magic.isolate_identifier(text,setlist, debug=False)
     name, color, type, price= Magic.get_parameters(set_code, col_num)
@@ -45,7 +45,7 @@ if choice=="2":
     print(name, color, type , price)
 
 elif choice == "1":
-    text = magic_read_cards.read("demo1")
+    text = read_cards.read("demo1")
     full_text = " ".join(text)
     #print(text)
     #print(full_text)

@@ -1,8 +1,8 @@
-def live_log(card_counter, name, color, type, price, sort_by, sort_value, bin,bin_mapping):
+def live_log(card_counter, name,subtype, color, type, price, sort_by, sort_value, bin,bin_mapping):
     yield {
             "card_counter": card_counter,
             "name": name,
-            "subtype": "Color",
+            "subtype": subtype,
             "subtype_value": color,
             "type": type,
             "price": price,

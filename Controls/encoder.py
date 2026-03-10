@@ -90,7 +90,7 @@ def main():
                 total_rotations -= 1
 
             last_angle = angle
-            
+    
             # Display
             print(f"Raw: {raw:4d} | Angle: {angle:6.2f}° | Total Rotations: {total_rotations:3d}", end='\r')
             

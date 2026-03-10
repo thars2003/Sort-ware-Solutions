@@ -1,4 +1,4 @@
-import Bin_Movement
+import Controls.Bin_Movement as Bin_Movement
 
 
 Bin_Movement.move_bin(1)
