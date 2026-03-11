@@ -1,3 +1,5 @@
+from Controls import dispenser
+
 from . import write_csv
 from . import read_cards
 from . import stream
@@ -5,7 +7,8 @@ import requests
 import re
 from datetime import datetime
 from . import sorting
-from . import image_capture
+from . import camera
+from Controls import dispenser
 
 
 def magic_main(sort_by):
@@ -21,7 +24,8 @@ def magic_main(sort_by):
         setlist.append(s["code"])
 
     while True:
-        image_capture.capture_image()
+        dispenser.dispense_card()
+        camera.capture_image()
         text = read_cards.read("demo1")
 
         if text is None: # change to if it reads sortware then the loop stops, for now it just tries 3 times then stops

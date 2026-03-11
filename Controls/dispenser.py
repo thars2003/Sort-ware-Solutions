@@ -93,6 +93,16 @@ def move_bin(target_bin):
         for _ in range(ccw_steps):
             step_counterclockwise(motor)
 
+def dispense_card():
+    motor = _get_motor()
+
+    print("Dispensing card...")
+    # push card fix rev and rpm
+    motor.rotate(0.12, rpm=30, clockwise=True)
+    # slight reverse to prevent double feed
+    motor.rotate(0.02, rpm=30, clockwise=False)
+
+    time.sleep(0.3)
 
 # Automatically cleanup motor on exit
 atexit.register(lambda: _motor_instance.cleanup() if _motor_instance else None)

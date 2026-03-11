@@ -6,6 +6,8 @@ import re
 from datetime import datetime
 from . import stream
 from . import sorting
+import camera 
+from Controls import dispenser
 
 
 bin_mapping= [0]*9
@@ -18,6 +20,8 @@ def pokemon_main(sort_by):
 
 
     while True:
+        dispenser.dispense_card()
+        camera.capture_image()
         card_counter+=1
         text = read_cards.read("demo1")
 
