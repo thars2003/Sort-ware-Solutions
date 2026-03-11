@@ -6,7 +6,7 @@ import numpy as np
 
 
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-SCANNED_DIR = os.path.join(BASE_DIR, "Scanned_Cards")
+SCANNED_DIR = os.path.join(BASE_DIR, "Pre-Scanned_Cards")
 
 img_path = os.path.join(SCANNED_DIR, "poke1.jpg")
 img = cv2.imread(img_path)

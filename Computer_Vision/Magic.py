@@ -5,20 +5,13 @@ import requests
 import re
 from datetime import datetime
 from . import sorting
-
-# import write_csv
-# import magic_read_cards
-# import Bin_Movement
-# import stream
-# import requests 
-# import re
-# from datetime import datetime
-
+from . import image_capture
 
 
 def magic_main(sort_by):
+    global Cards
+    temp=0
     write_csv.create_csv("magic")
-
     setlist=[]
     card_counter=0
     url = f"https://api.scryfall.com/sets"
@@ -27,13 +20,19 @@ def magic_main(sort_by):
     for s in sets["data"]:
         setlist.append(s["code"])
 
-    for i in range(1, 11):
-        card_counter+=1
-        text=read_cards.read(f"mtg{i}")
-        #print(text)
+    while True:
+        image_capture.capture_image()
+        text = read_cards.read("demo1")
+
+        if text is None: # change to if it reads sortware then the loop stops, for now it just tries 3 times then stops
+            temp+=1
+            if temp>=3:
+                return None
+    
         set_code,col_num=isolate_identifier(text,setlist)
-        print(set_code,col_num)
         name,color,type,price=get_parameters(set_code, col_num)
+
+
 
         if len(set(color)) > 1:
             color="Multicolor"
@@ -59,7 +58,7 @@ def magic_main(sort_by):
             yield from sorting.magic_color(name,"Color",color,type,price,card_counter)
         elif sort_by=="mtg_type":
             yield from sorting.magic_type(name,"Color",color,type,price,card_counter)
-    return None
+        return None
 
 
 

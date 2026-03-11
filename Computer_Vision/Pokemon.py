@@ -1,31 +1,33 @@
 from turtle import color
 from . import write_csv
-from . import poke_read_cards
+from . import read_cards
 import requests # type: ignore
 import re
 from datetime import datetime
 from . import stream
 from . import sorting
 
-# from turtle import color
-# import write_csv
-# import poke_read_cards
-# import requests # type: ignore
-# import re
-# from datetime import datetime
-# import Bin_Movement
-# import stream
+
 bin_mapping= [0]*9
 
 
 def pokemon_main(sort_by):
     write_csv.create_csv("pokemon")
-
     card_counter=0
-    for i in range(1, 11):
+    temp=0
+
+
+    while True:
         card_counter+=1
-        text=poke_read_cards.read(i)
-        col_num=isolate_identifier(text)
+        text = read_cards.read("demo1")
+
+        if text is None: # change to if it reads sortware then the loop stops, for now it just tries 3 times then stops
+            temp+=1
+            if temp>=3:
+                return None
+            
+        full_text = " ".join(text)
+        col_num=isolate_identifier(full_text)
         print(col_num)
         name,category,type,price=get_parameters("swsh11", col_num)
         write_csv.append_csv(name,category,type,price)
@@ -36,8 +38,7 @@ def pokemon_main(sort_by):
             yield from sorting.pokemon_category(name,"Category",category,type,price,card_counter)
         elif sort_by=="pokemon_type":
             yield from sorting.pokemon_type(name,"Category",category,type,price,card_counter)
-
-    return None
+        return None
 
 
 ###### HELPER FUNCTIONS #####

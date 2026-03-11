@@ -33,7 +33,7 @@ else:
 
 def read(image_name):
     BASE_DIR = Path(__file__).resolve().parent.parent
-    SCANNED_CARDS_DIR = BASE_DIR / "Scanned_Cards"
+    SCANNED_CARDS_DIR = BASE_DIR / "Pre-Scanned_Cards"
 
     img_path = SCANNED_CARDS_DIR / f"{image_name}.jpg"
 
