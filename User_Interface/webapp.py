@@ -1,6 +1,7 @@
 import subprocess
 import threading
-from flask import Flask, render_template, Response, request, json, redirect, url_for
+import time
+from flask import Flask, render_template, Response, request, json, redirect, url_for,send_from_directory
 from Computer_Vision import Magic, Pokemon
 # from Computer_Vision import Led
 app = Flask(__name__)
@@ -13,23 +14,54 @@ wifi_device = "wlan0"
 def home():
     return render_template("home.html")
 
+OUTPUT_FOLDER="/home/sortware/Documents/Sort-ware-Solutions/Output_Files"
+@app.route("/download-csv")
+def download_csv():
+    filename = "magic-2026-03-12_21-25-34.csv"  # your existing CSV filename
+    return send_from_directory(OUTPUT_FOLDER, filename, as_attachment=True)
 
+pause_event = threading.Event()
+stop_event = threading.Event()
+
+pause_event.clear()
+stop_event.clear()
+
+def card_sort_stream(sort_value):
+    if not sort_value:
+        return
+    generator = None
+    if sort_value.startswith("mtg"):
+        generator = Magic.magic_main(sort_value)
+    elif sort_value.startswith("pokemon"):
+        generator = Pokemon.pokemon_main(sort_value)
+    else:
+        return
+    for card in generator:
+        # Wait if paused
+        while pause_event.is_set():
+            time.sleep(0.3)
+        if stop_event.is_set():
+            break
+        yield f"data: {json.dumps(card)}\n\n"
 @app.route("/stream")
 def stream():
     sort_value = request.args.get("sort")
-    def event_stream():
-        if not sort_value:
-            return
+    stop_event.clear()
+    return Response(card_sort_stream(sort_value), mimetype="text/event-stream")
+@app.route("/pause", methods=["POST"])
+def pause():
+    pause_event.set()
+    return "paused"
+@app.route("/resume", methods=["POST"])
+def resume():
+    pause_event.clear()
+    return "resumed"
+@app.route("/stop", methods=["POST"])
+def stop():
+    stop_event.set()
+    pause_event.clear()
+    return "stopped"
 
-        if sort_value.startswith("mtg"):
-            for card in Magic.magic_main(sort_value):
-                yield f"data: {json.dumps(card)}\n\n"
-
-        elif sort_value.startswith("pokemon"):
-            for card in Pokemon.pokemon_main(sort_value):
-                yield f"data: {json.dumps(card)}\n\n"
-
-    return Response(event_stream(), mimetype="text/event-stream")
 
 @app.route("/wifi")
 def wifi():

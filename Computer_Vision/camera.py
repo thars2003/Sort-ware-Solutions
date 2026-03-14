@@ -1,5 +1,5 @@
 import cv2
-import Led
+from . import Led
 
 def capture_image():
     Led.turn_on_light()

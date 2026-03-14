@@ -18,12 +18,13 @@
     <!-- HEADER / CONTROLS -->
     <div class="controls-area">
         <img src="{{ url_for('static', filename='logo.png') }}" class="controls-logo">
+
         <h1>Card Sorter</h1>
 
-        <!-- IMPORTANT: no form submit -->
-        <button type="button" class="play-pause-btn" aria-label="Play or Pause">
-            ▶
-        </button>
+        <div class="controls-buttons">
+            <button type="button" class="play-pause-btn" aria-label="Play or Pause">▶</button>
+            <button type="button" class="stop-btn" aria-label="Stop">⏹</button>
+        </div>
     </div>
 
     <!-- TOP ROW -->
@@ -187,38 +188,36 @@
 
 <script>
 const btn = document.querySelector('.play-pause-btn');
+const stopBtn = document.querySelector('.stop-btn');
 let eventSource = null;
 
 btn.addEventListener('click', () => {
     btn.classList.toggle('playing');
-    btn.textContent = btn.classList.contains('playing') ? '⏸' : '▶';
-
     if (btn.classList.contains('playing')) {
-        startStream();
+        btn.textContent = '⏸';
+        stopBtn.classList.remove('stopped');
+        setRadiosDisabled(true);  
+        if (eventSource === null) {
+            startStream();
+        } else {
+            resumeStream();
+        }
     } else {
-        stopStream();
+        btn.textContent = '▶';
+        pauseStream();
     }
 });
 
-function updateBins(binMapping, activeBin) {
-    binMapping.forEach((count, index) => {
-        const binNum = index + 1;
-        const countEl = document.getElementById(`bin${binNum}`);
-        const cardEl = document.getElementById(`binCard${binNum}`);
-
-        if (countEl) countEl.textContent = count;
-
-        if (cardEl) {
-            cardEl.classList.toggle("active-bin", binNum === activeBin);
-        }
-    });
+stopBtn.addEventListener('click', () => {
+    stopStream();
+    btn.classList.remove('playing');
+    btn.textContent = '▶';
+    stopBtn.classList.add('stopped');  
+    setRadiosDisabled(false);
+});
+function setRadiosDisabled(disabled) {
+    document.querySelectorAll('input[name="sort"]').forEach(r => r.disabled = disabled);
 }
-
-function getSelectedSort() {
-    const selected = document.querySelector('input[name="sort"]:checked');
-    return selected ? selected.value : "";
-}
-
 function startStream() {
     const log = document.getElementById("log");
     log.innerHTML = "";
@@ -228,51 +227,71 @@ function startStream() {
 
     eventSource.onmessage = (event) => {
         const card = JSON.parse(event.data);
-
-        const div = document.createElement("div");
-        div.className = "log-card";
-
-        div.innerHTML = `
-            <div class="log-row">
-                <div class="log-left">
-                    <strong>${card.card_counter}. ${card.name}</strong><br>
-                    ${card.subtype}: ${card.subtype_value} | Type: ${card.type} | Price: $${card.price}
-                </div>
-                <div class="log-right">
-                    <strong></strong><br>
-                    ${card.sort_by}: ${card.sort_value} | Assigned Bin: ${card.bin}
-                </div>
-            </div>
-        `;
-        log.appendChild(div);
-
-        // Optional: auto-scroll to bottom
-        log.scrollTop = log.scrollHeight;
-
-        if (card.bin_mapping) {
-        updateBins(card.bin_mapping, card.bin);
-        }
+        appendLog(card);
     };
 
-    eventSource.onerror = () => stopStream();
+    eventSource.onerror = () => {
+        console.warn("Stream ended or error");
+    };
 }
-function updateBins(binMapping, activeBin) {
-    binMapping.forEach((count, index) => {
-        const binNum = index + 1;
-        const el = document.getElementById(`bin${binNum}`);
-        if (el) {
-            el.textContent = count;
-            el.parentElement.classList.toggle("active-bin", binNum === activeBin);
-        }
-    });
+
+function appendLog(card) {
+    const log = document.getElementById("log");
+    const div = document.createElement("div");
+    div.className = "log-card";
+    div.innerHTML = `
+        <div class="log-row">
+            <div class="log-left">
+                <strong>${card.card_counter}. ${card.name}</strong><br>
+                ${card.subtype}: ${card.subtype_value} | Type: ${card.type} | Price: $${card.price}
+            </div>
+            <div class="log-right">
+                ${card.sort_by}: ${card.sort_value} | Assigned Bin: ${card.bin}
+            </div>
+        </div>
+    `;
+    log.appendChild(div);
+    log.scrollTop = log.scrollHeight;
+
+    if (card.bin_mapping) {
+        updateBins(card.bin_mapping, card.bin);
+    }
 }
+
+function pauseStream() {
+    fetch('/pause', { method: 'POST' });
+}
+
+function resumeStream() {
+    fetch('/resume', { method: 'POST' });
+}
+
 function stopStream() {
+    fetch('/stop', { method: 'POST' });
     if (eventSource) {
         eventSource.close();
         eventSource = null;
     }
 }
+
+function getSelectedSort() {
+    const selected = document.querySelector('input[name="sort"]:checked');
+    return selected ? selected.value : "";
+}
+
+function updateBins(binMapping, activeBin) {
+    binMapping.forEach((count, index) => {
+        const binNum = index + 1;
+        const countEl = document.getElementById(`bin${binNum}`);
+        const cardEl = document.getElementById(`binCard${binNum}`);
+        if (countEl) countEl.textContent = count;
+        if (cardEl) {
+            cardEl.classList.toggle("active-bin", binNum === activeBin);
+        }
+    });
+}
 </script>
 
 </body>
 </html>
+

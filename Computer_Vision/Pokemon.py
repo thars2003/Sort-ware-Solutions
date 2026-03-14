@@ -6,8 +6,9 @@ import re
 from datetime import datetime
 from . import stream
 from . import sorting
-import camera 
+from . import camera 
 from Controls import dispenser
+from Controls import servo
 
 
 bin_mapping= [0]*9
@@ -17,9 +18,10 @@ def pokemon_main(sort_by):
     write_csv.create_csv("pokemon")
     card_counter=0
     temp=0
-
+    servo.intialize()
 
     while True:
+        servo.hold_card()
         dispenser.dispense_card()
         camera.capture_image()
         card_counter+=1
@@ -42,7 +44,9 @@ def pokemon_main(sort_by):
             yield from sorting.pokemon_category(name,"Category",category,type,price,card_counter)
         elif sort_by=="pokemon_type":
             yield from sorting.pokemon_type(name,"Category",category,type,price,card_counter)
-        return None
+        
+        servo.release_card()
+        card_counter+=1
 
 
 ###### HELPER FUNCTIONS #####

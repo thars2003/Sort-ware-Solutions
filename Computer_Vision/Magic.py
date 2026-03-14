@@ -1,5 +1,5 @@
 from Controls import dispenser
-
+from Controls import servo
 from . import write_csv
 from . import read_cards
 from . import stream
@@ -8,7 +8,7 @@ import re
 from datetime import datetime
 from . import sorting
 from . import camera
-from Controls import dispenser
+
 
 
 def magic_main(sort_by):
@@ -17,6 +17,8 @@ def magic_main(sort_by):
     write_csv.create_csv("magic")
     setlist=[]
     card_counter=0
+    servo.intialize()
+    
     url = f"https://api.scryfall.com/sets"
     response = requests.get(url)
     sets = response.json()
@@ -24,6 +26,7 @@ def magic_main(sort_by):
         setlist.append(s["code"])
 
     while True:
+        servo.hold_card()
         dispenser.dispense_card()
         camera.capture_image()
         text = read_cards.read("demo1")
@@ -62,8 +65,8 @@ def magic_main(sort_by):
             yield from sorting.magic_color(name,"Color",color,type,price,card_counter)
         elif sort_by=="mtg_type":
             yield from sorting.magic_type(name,"Color",color,type,price,card_counter)
-        return None
-
+        card_counter+=1
+        servo.release_card()
 
 
 ###### HELPER FUNCTIONS #####
