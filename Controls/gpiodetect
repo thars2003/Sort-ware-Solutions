@@ -1,0 +1,8 @@
+sudo lsof /dev/gpiochip0
+lsof: WARNING: can't stat() fuse.gvfsd-fuse file system /run/user/1000/gvfs
+      Output information may be incomplete.
+lsof: WARNING: can't stat() fuse.portal file system /run/user/1000/doc
+      Output information may be incomplete.
+COMMAND  PID     USER FD   TYPE DEVICE SIZE/OFF NODE NAME
+python3 3635 sortware 5u   CHR  254,0      0t0  131 /dev/gpiochip0
+python3 3635 sortware 7u   CHR  254,0      0t0  131 /dev/gpiochip0

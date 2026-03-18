@@ -98,11 +98,14 @@ def dispense_card():
 
     print("Dispensing card...")
     # push card fix rev and rpm
-    motor.rotate(0.12, rpm=30, clockwise=True)
+    motor.rotate(1.632, rpm=30, clockwise=False)
     # slight reverse to prevent double feed
-    motor.rotate(0.02, rpm=30, clockwise=False)
+    # motor.rotate(0.20, rpm=30, clockwise=True)
+
 
     time.sleep(0.3)
 
 # Automatically cleanup motor on exit
 atexit.register(lambda: _motor_instance.cleanup() if _motor_instance else None)
+
+# dispense_card()
