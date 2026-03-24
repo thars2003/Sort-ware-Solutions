@@ -14,6 +14,30 @@ wifi_device = "wlan0"
 def home():
     return render_template("home.html")
 
+def boot_buzzer():
+    import lgpio
+    import time
+
+    BUZZER_PIN = 20
+
+    # Ascending startup chime
+    melody = [523, 659, 784, 1047]  # C5, E5, G5, C6
+    durations = [0.1, 0.1, 0.1, 0.3]
+
+    h_buzz = lgpio.gpiochip_open(0)
+    lgpio.gpio_claim_output(h_buzz, BUZZER_PIN)
+
+    for freq, dur in zip(melody, durations):
+        lgpio.tx_pwm(h_buzz, BUZZER_PIN, freq, 50)
+        time.sleep(dur)
+        lgpio.tx_pwm(h_buzz, BUZZER_PIN, 0, 0)
+        time.sleep(0.03)
+
+    lgpio.gpio_free(h_buzz, BUZZER_PIN)
+    lgpio.gpiochip_close(h_buzz)
+
+threading.Thread(target=boot_buzzer, daemon=True).start()
+
 OUTPUT_FOLDER="/home/sortware/Documents/Sort-ware-Solutions/Output_Files"
 @app.route("/download-csv")
 def download_csv():
