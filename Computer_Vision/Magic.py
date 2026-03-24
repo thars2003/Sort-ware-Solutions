@@ -17,7 +17,7 @@ def magic_main(sort_by):
     write_csv.create_csv("magic")
     setlist=[]
     card_counter=0
-    servo.intialize()
+    servo.initialize()
     
     url = f"https://api.scryfall.com/sets"
     response = requests.get(url)

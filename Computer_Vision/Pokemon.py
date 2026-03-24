@@ -18,7 +18,7 @@ def pokemon_main(sort_by):
     write_csv.create_csv("pokemon")
     card_counter=0
     temp=0
-    servo.intialize()
+    servo.initialize()
 
     while True:
         servo.hold_card()

@@ -306,7 +306,7 @@ p, li {
 .bin-container {
     width: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr;   /* two columns */
+    grid-template-columns: 1fr;   /* two columns */
     gap: 10px;
     padding: 10px;
 }
@@ -382,4 +382,67 @@ p, li {
 .radio-container:has(input:disabled) {
     opacity: 0.4;
     cursor: not-allowed;
+}
+
+.status-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    padding-top: 8px;
+}
+ 
+.status-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background-color: rgba(255, 255, 255, 0.04);
+    border-left: 3px solid rgb(87, 0, 0);
+    border-radius: 4px;
+    gap: 10px;
+}
+ 
+.status-label {
+    font-size: 1.8vmin;
+    color: #800000;
+    font-weight: bold;
+    white-space: nowrap;
+    min-width: 80px;
+}
+ 
+.status-value {
+    font-size: 1.8vmin;
+    color: #e0e0e0;
+    flex: 1;
+    text-align: center;
+}
+ 
+.status-playing {
+    color: #4caf50;
+}
+ 
+.status-paused {
+    color: #ff9800;
+}
+ 
+.status-stopped {
+    color: #e53935;
+}
+ 
+.status-btn {
+    font-size: 1.6vmin;
+    color: #e0e0e0;
+    background-color: #1a1a1a;
+    border: 1px solid #570000;
+    border-radius: 4px;
+    padding: 4px 10px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+}
+ 
+.status-btn:hover {
+    background-color: #2a1a1a;
+    box-shadow: 0 0 8px rgba(87, 0, 0, 0.8);
 }

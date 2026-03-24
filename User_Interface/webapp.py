@@ -17,9 +17,24 @@ def home():
 OUTPUT_FOLDER="/home/sortware/Documents/Sort-ware-Solutions/Output_Files"
 @app.route("/download-csv")
 def download_csv():
-    filename = "magic-2026-03-12_21-25-34.csv"  # your existing CSV filename
+    filename = "sortware_export.csv"  # your existing CSV filename
     return send_from_directory(OUTPUT_FOLDER, filename, as_attachment=True)
 
+
+@app.route('/wifi-status')
+def wifi_status():
+    result = subprocess.run(
+        ['nmcli', '-t', '-f', 'ACTIVE,SSID', 'dev', 'wifi'],
+        capture_output=True, text=True
+    )
+    for line in result.stdout.splitlines():
+        if line.startswith('yes:'):
+            ssid = line.split(':', 1)[1]
+            return json.jsonify({'connected': True, 'ssid': ssid})
+    return json.jsonify({'connected': False, 'ssid': ''})
+ 
+ 
+ 
 pause_event = threading.Event()
 stop_event = threading.Event()
 

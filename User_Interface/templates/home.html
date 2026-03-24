@@ -68,71 +68,25 @@
 
         <!-- SYSTEM STATUS -->
         <div class="container container-2">
-            <h2>Bin Status</h2>
+            <h2>Status</h2>
             <div class="bin-container" id="binStatus">
-
-                    <div class="bin-card" id="binCard1">
-                        <div class="log-row">
-                            <div class="log-left"><strong>Bin 1</strong></div>
-                            <div class="log-right"><span id="bin1">0</span></div>
-                        </div>
-                    </div>
-
-                    <div class="bin-card" id="binCard2">
-                        <div class="log-row">
-                            <div class="log-left"><strong>Bin 2</strong></div>
-                            <div class="log-right"><span id="bin2">0</span></div>
-                        </div>
-                    </div>
-
-                    <div class="bin-card" id="binCard3">
-                        <div class="log-row">
-                            <div class="log-left"><strong>Bin 3</strong></div>
-                            <div class="log-right"><span id="bin3">0</span></div>
-                        </div>
-                    </div>
-
-                    <div class="bin-card" id="binCard4">
-                        <div class="log-row">
-                            <div class="log-left"><strong>Bin 4</strong></div>
-                            <div class="log-right"><span id="bin4">0</span></div>
-                        </div>
-                    </div>
-
-                    <div class="bin-card" id="binCard5">
-                        <div class="log-row">
-                            <div class="log-left"><strong>Bin 5</strong></div>
-                            <div class="log-right"><span id="bin5">0</span></div>
-                        </div>
-                    </div>
-
-                    <div class="bin-card" id="binCard6">
-                        <div class="log-row">
-                            <div class="log-left"><strong>Bin 6</strong></div>
-                            <div class="log-right"><span id="bin6">0</span></div>
-                        </div>
-                    </div>
-
-                    <div class="bin-card" id="binCard7">
-                        <div class="log-row">
-                            <div class="log-left"><strong>Bin 7</strong></div>
-                            <div class="log-right"><span id="bin7">0</span></div>
-                        </div>
-                    </div>
-
-                    <div class="bin-card" id="binCard8">
-                        <div class="log-row">
-                            <div class="log-left"><strong>Bin 8</strong></div>
-                            <div class="log-right"><span id="bin8">0</span></div>
-                        </div>
-                    </div>
-
-                    <div class="bin-card" id="binCard9">
-                        <div class="log-row">
-                            <div class="log-left"><strong>Bin 9</strong></div>
-                            <div class="log-right"><span id="bin9">0</span></div>
-                        </div>
-                    </div>
+                    <div class="status-card">
+                    <div class="status-label">WiFi:</div>
+                    <div class="status-value" id="wifiStatus">Checking...</div>
+                    <a href="/wifi" class="status-btn">Configure</a>
+                </div>
+ 
+                <!-- Sort Status -->
+                <div class="status-card">
+                    <div class="status-label">Sort Status:</div>
+                    <div class="status-value" id="sortStatus">Stopped</div>
+                </div>
+ 
+                <!-- CSV Download -->
+                <div class="status-card">
+                    <div class="status-label">Export</div>
+                    <a href="/download-csv" class="status-btn">Download CSV</a>
+                </div>
 
                 </div>
 
@@ -187,6 +141,7 @@
 </div>
 
 <script>
+const sortStatusEl = document.getElementById('sortStatus');
 const btn = document.querySelector('.play-pause-btn');
 const stopBtn = document.querySelector('.stop-btn');
 let eventSource = null;
@@ -197,6 +152,8 @@ btn.addEventListener('click', () => {
         btn.textContent = '⏸';
         stopBtn.classList.remove('stopped');
         setRadiosDisabled(true);  
+        sortStatusEl.textContent = 'Playing';
+        sortStatusEl.className = 'status-value status-playing';
         if (eventSource === null) {
             startStream();
         } else {
@@ -204,6 +161,8 @@ btn.addEventListener('click', () => {
         }
     } else {
         btn.textContent = '▶';
+        sortStatusEl.textContent = 'Paused';
+        sortStatusEl.className = 'status-value status-paused';
         pauseStream();
     }
 });
@@ -214,6 +173,8 @@ stopBtn.addEventListener('click', () => {
     btn.textContent = '▶';
     stopBtn.classList.add('stopped');  
     setRadiosDisabled(false);
+    sortStatusEl.textContent = 'Stopped';
+    sortStatusEl.className = 'status-value status-stopped';
 });
 function setRadiosDisabled(disabled) {
     document.querySelectorAll('input[name="sort"]').forEach(r => r.disabled = disabled);
@@ -290,6 +251,27 @@ function updateBins(binMapping, activeBin) {
         }
     });
 }
+// Poll WiFi status every 10 seconds
+function fetchWifiStatus() {
+    fetch('/wifi-status')
+        .then(r => r.json())
+        .then(data => {
+            const el = document.getElementById('wifiStatus');
+            if (data.connected) {
+                el.textContent = data.ssid;
+                el.className = 'status-value status-playing';
+            } else {
+                el.textContent = 'Not Connected';
+                el.className = 'status-value status-stopped';
+            }
+        })
+        .catch(() => {
+            document.getElementById('wifiStatus').textContent = 'Unknown';
+        });
+}
+ 
+fetchWifiStatus();
+setInterval(fetchWifiStatus, 10000);
 </script>
 
 </body>
