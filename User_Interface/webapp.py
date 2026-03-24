@@ -37,7 +37,6 @@ def boot_buzzer():
     lgpio.gpiochip_close(h_buzz)
 
 threading.Thread(target=boot_buzzer, daemon=True).start()
-
 OUTPUT_FOLDER="/home/sortware/Documents/Sort-ware-Solutions/Output_Files"
 @app.route("/download-csv")
 def download_csv():
