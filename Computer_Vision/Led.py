@@ -2,7 +2,7 @@ import time
 import board
 import neopixel
 
-LED_PIN = board.D18
+LED_PIN = board.D19
 NUM_LEDS = 12
 GLOBAL_BRIGHTNESS = 0.5
 

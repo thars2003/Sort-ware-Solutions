@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <title>Sort-Ware Solutions</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    
     <link rel="icon" href="{{ url_for('static', filename='logo.ico') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='style_dark.css') }}">
+        
 </head>
 
 <body style="background-image:url('{{ url_for('static', filename='background.png') }}'); background-size: cover; background-repeat: no-repeat; background-position: center;">
@@ -17,12 +18,14 @@
 
     <!-- HEADER / CONTROLS -->
     <div class="controls-area">
-        <img src="{{ url_for('static', filename='logo.png') }}" class="controls-logo">
-
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <img src="{{ url_for('static', filename='logo.png') }}" class="controls-logo">
+            <button type="button" class="play-pause-btn" aria-label="Play or Pause">▶</button>
+        </div>
         <h1>Card Sorter</h1>
 
         <div class="controls-buttons">
-            <button type="button" class="play-pause-btn" aria-label="Play or Pause">▶</button>
+            
             <button type="button" class="stop-btn" aria-label="Stop">⏹</button>
         </div>
     </div>
@@ -84,7 +87,7 @@
  
                 <!-- CSV Download -->
                 <div class="status-card">
-                    <div class="status-label">Export</div>
+                    <div class="status-label">Export:</div>
                     <a href="/download-csv" class="status-btn">Download CSV</a>
                 </div>
 

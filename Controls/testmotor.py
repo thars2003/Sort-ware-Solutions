@@ -7,8 +7,8 @@ Helps you tune the current limit by testing motor performance
 import lgpio
 import time
 
-STEP_PIN = 22
-DIR_PIN = 10
+STEP_PIN = 13
+DIR_PIN = 19
 
 def vref_tuning_guide():
     """Interactive guide for adjusting Vref without a multimeter"""

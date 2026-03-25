@@ -6,6 +6,7 @@ import pytesseract
 import shutil
 import sys
 import os
+import cv2
 
 # --- Auto-detect Tesseract (cross-platform) ---
 tesseract_path = shutil.which("tesseract")
@@ -40,8 +41,19 @@ def read(image_name):
     if not img_path.exists():
         raise FileNotFoundError(f"Image not found: {img_path}")
 
+    #  # Load and preprocess
+    # img = cv2.imread(str(img_path))
+    # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    
+    # # Increase contrast
+    # gray = cv2.equalizeHist(gray)
+    
+    # # Threshold to make text pop
+    # _, thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
     img = Image.open(img_path)
     text = pytesseract.image_to_string(img)
+    # text = pytesseract.image_to_string(thresh)
     lines = [line.strip() for line in text.splitlines() if line.strip()]
 
     return lines

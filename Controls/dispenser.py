@@ -11,7 +11,7 @@ _motor_instance = None  # Singleton motor instance
 
 
 class A4988StepperMotor:
-    def __init__(self, step_pin=22, dir_pin=10, steps_per_rev=200):
+    def __init__(self, step_pin=13, dir_pin=19, steps_per_rev=200):
         self.STEP_PIN = step_pin
         self.DIR_PIN = dir_pin
         self.steps_per_rev = steps_per_rev
