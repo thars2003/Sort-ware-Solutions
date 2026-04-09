@@ -8,6 +8,7 @@ import re
 from datetime import datetime
 from . import sorting
 from . import camera
+import time
 
 
 
@@ -67,6 +68,7 @@ def magic_main(sort_by):
             yield from sorting.magic_type(name,"Color",color,type,price,card_counter)
         card_counter+=1
         servo.release_card()
+        time.sleep(2)
 
 
 ###### HELPER FUNCTIONS #####

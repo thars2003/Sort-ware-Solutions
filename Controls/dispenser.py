@@ -126,11 +126,11 @@ def dispense_card():
     motor = _get_dispense_motor()
     print(f"Dispense motor STEP_PIN={motor.STEP_PIN}, DIR_PIN={motor.DIR_PIN}, handle={motor.h}")
     print("Dispensing card...")
-    motor.rotate(1.632, rpm=30, clockwise=False)
-    time.sleep(0.3)
+    motor.rotate(1.845, rpm=30, clockwise=False) #1.632
+    time.sleep(1)
     # motor = _get_dispense_motor()
     # print("Dispensing card...")
-    # motor.rotate(1.632, rpm=30, clockwise=False)
+    motor.rotate(0.4, rpm=30, clockwise=True)
     # time.sleep(0.3)
 
 

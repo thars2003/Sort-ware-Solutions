@@ -1,8 +1,9 @@
 import time
 import board
 import neopixel
+import lgpio
 
-LED_PIN = board.D19
+LED_PIN = board.D18
 NUM_LEDS = 12
 GLOBAL_BRIGHTNESS = 0.5
 
@@ -27,7 +28,13 @@ def show():
     pixels.show()
 
 def turn_on_light():
+    # chip= lgpio.gpiochip_open(0)
+    # lgpio.gpio_claim_input(chip,25)
+    # lgpio.gpio_claim_output(chip,18)
+    # lgpio.gpiochip_close(chip)
     clear()
+    # for x in range(12):
+    #     set_pixel(x, 0, 0, 0, 0.05)
     set_pixel(0, 255, 255, 255, 0.05) # Very dim white 
     set_pixel(1, 255, 255, 255, 0.10) # Dim white 
     set_pixel(2, 255, 255, 255, 0.15) 
@@ -41,3 +48,5 @@ def turn_on_light():
     set_pixel(10, 255, 255, 255, 0.95) 
     set_pixel(11, 255, 255, 255, 1.00)
     show()
+
+turn_on_light()
