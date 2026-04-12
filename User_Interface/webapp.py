@@ -3,12 +3,13 @@ import threading
 import time
 from flask import Flask, render_template, Response, request, json, redirect, url_for,send_from_directory
 from Computer_Vision import Magic, Pokemon
+from Controls import dispenser
 # from Computer_Vision import Led
 app = Flask(__name__)
 wifi_device = "wlan0"
-# @app.before_first_request
-# def start_led():
-#     Led.run() 
+def initialize():
+    dispenser._get_bin_motor().disable()
+    dispenser._get_dispense_motor().disable()
 
 @app.route("/")
 def home():
@@ -70,7 +71,7 @@ def card_sort_stream(sort_value):
         return
     generator = None
     if sort_value.startswith("mtg"):
-        generator = Magic.magic_main(sort_value)
+        generator = Magic.magic_main(sort_value, pause_event)
     elif sort_value.startswith("pokemon"):
         generator = Pokemon.pokemon_main(sort_value)
     else:
@@ -100,6 +101,17 @@ def stop():
     stop_event.set()
     pause_event.clear()
     return "stopped"
+
+
+@app.route('/calibrate/left', methods=['POST'])
+def calibrate_left():
+    dispenser.step_counterclockwise(dispenser._get_bin_motor())
+    return '', 204
+
+@app.route('/calibrate/right', methods=['POST'])
+def calibrate_right():
+    dispenser.step_clockwise(dispenser._get_bin_motor())
+    return '', 204
 
 
 @app.route("/wifi")

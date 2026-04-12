@@ -448,3 +448,32 @@ p, li {
     background-color: #2a1a1a;
     box-shadow: 0 0 8px rgba(87, 0, 0, 0.8);
 }
+.calibrate-btns {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.calibrate-btn {
+    font-size: 1.6vmin;
+    color: #e0e0e0;
+    background-color: #1a1a1a;
+    border: 1px solid #570000;
+    border-radius: 4px;
+    padding: 4px 14px;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: box-shadow 0.2s ease, background-color 0.2s ease;
+    font-family: Arial, sans-serif;
+}
+
+.calibrate-btn:hover {
+    background-color: #2a1a1a;
+    box-shadow: 0 0 8px rgba(87, 0, 0, 0.8);
+}
+
+.calibrate-btn:active {
+    background-color: #800000;
+    color: #111111;
+}

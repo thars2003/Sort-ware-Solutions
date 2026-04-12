@@ -84,7 +84,13 @@
                     <div class="status-label">Sort Status:</div>
                     <div class="status-value" id="sortStatus">Stopped</div>
                 </div>
- 
+                <div class="status-card">
+                    <div class="status-label">Calibrate:</div>
+                    <div class="calibrate-btns">
+                        <button class="calibrate-btn" onclick="fetch('/calibrate/left', {method:'POST'})">&#8592; Turn Left</button>
+                        <button class="calibrate-btn" onclick="fetch('/calibrate/right', {method:'POST'})">Turn Right &#8594;</button>
+                    </div>
+                </div>
                 <!-- CSV Download -->
                 <div class="status-card">
                     <div class="status-label">Export:</div>

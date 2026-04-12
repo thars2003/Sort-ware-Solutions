@@ -25,7 +25,7 @@ def pokemon_main(sort_by):
         dispenser.dispense_card()
         camera.capture_image()
         card_counter+=1
-        text = read_cards.read("demo1")
+        text = read_cards.read("image capture")
 
         if text is None: # change to if it reads sortware then the loop stops, for now it just tries 3 times then stops
             temp+=1

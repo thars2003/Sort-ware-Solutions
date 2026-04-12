@@ -5,6 +5,7 @@ import atexit
 NUM_BINS = 9
 REV_PER_BIN = 1.0  # Revolutions per bin
 current_bin = 1  # Track current bin
+step_count = 0  # Track total steps
 
 # Shared chip handle
 _chip_handle = None
@@ -15,27 +16,57 @@ def _get_chip():
     if _chip_handle is None:
         _chip_handle = lgpio.gpiochip_open(4)
     return _chip_handle
-
-
 class A4988StepperMotor:
-    def __init__(self, step_pin, dir_pin, steps_per_rev=200, chip_handle=None):
+    def __init__(self, step_pin, dir_pin, enable_pin=None, steps_per_rev=200, chip_handle=None):
         self.STEP_PIN = step_pin
         self.DIR_PIN = dir_pin
+        self.ENABLE_PIN = enable_pin
         self.steps_per_rev = steps_per_rev
         self.h = chip_handle if chip_handle is not None else lgpio.gpiochip_open(4)
-        try:
-            lgpio.gpio_free(self.h, self.STEP_PIN)
-        except lgpio.error:
-            pass
 
-        try:
-            lgpio.gpio_free(self.h, self.DIR_PIN)
-        except lgpio.error:
-            pass
-        lgpio.gpio_claim_output(self.h, self.STEP_PIN)
-        lgpio.gpio_claim_output(self.h, self.DIR_PIN)
-        lgpio.gpio_write(self.h, self.STEP_PIN, 0)
-        lgpio.gpio_write(self.h, self.DIR_PIN, 0)
+        for pin in [self.STEP_PIN, self.DIR_PIN]:
+            try:
+                lgpio.gpio_free(self.h, pin)
+            except lgpio.error:
+                pass
+            lgpio.gpio_claim_output(self.h, pin)
+            lgpio.gpio_write(self.h, pin, 0)
+
+        if self.ENABLE_PIN is not None:
+            try:
+                lgpio.gpio_free(self.h, self.ENABLE_PIN)
+            except lgpio.error:
+                pass
+            lgpio.gpio_claim_output(self.h, self.ENABLE_PIN)
+            lgpio.gpio_write(self.h, self.ENABLE_PIN, 1)  # Start disabled (high = off)
+
+    def enable(self):
+        if self.ENABLE_PIN is not None:
+            lgpio.gpio_write(self.h, self.ENABLE_PIN, 0)  # Low = on
+
+    def disable(self):
+        if self.ENABLE_PIN is not None:
+            lgpio.gpio_write(self.h, self.ENABLE_PIN, 1)  # High = off
+
+# class A4988StepperMotor:
+#     def __init__(self, step_pin, dir_pin, steps_per_rev=200, chip_handle=None):
+#         self.STEP_PIN = step_pin
+#         self.DIR_PIN = dir_pin
+#         self.steps_per_rev = steps_per_rev
+#         self.h = chip_handle if chip_handle is not None else lgpio.gpiochip_open(4)
+#         try:
+#             lgpio.gpio_free(self.h, self.STEP_PIN)
+#         except lgpio.error:
+#             pass
+
+#         try:
+#             lgpio.gpio_free(self.h, self.DIR_PIN)
+#         except lgpio.error:
+#             pass
+#         lgpio.gpio_claim_output(self.h, self.STEP_PIN)
+#         lgpio.gpio_claim_output(self.h, self.DIR_PIN)
+#         lgpio.gpio_write(self.h, self.STEP_PIN, 0)
+#         lgpio.gpio_write(self.h, self.DIR_PIN, 0)
 
     def set_direction(self, clockwise=True):
         lgpio.gpio_write(self.h, self.DIR_PIN, 1 if clockwise else 0)
@@ -72,7 +103,7 @@ def _get_bin_motor():
     print("_get_bin_motor called")
     if _bin_motor_instance is None:
         print("Initializing bin motor...")
-        _bin_motor_instance = A4988StepperMotor(step_pin=13, dir_pin=19, chip_handle=_get_chip())
+        _bin_motor_instance = A4988StepperMotor(step_pin=13, dir_pin=19, enable_pin=11, chip_handle=_get_chip())
         print("Bin motor initialized")
     return _bin_motor_instance
 
@@ -82,26 +113,65 @@ def _get_dispense_motor():
     print("_get_dispense_motor called")
     if _dispense_motor_instance is None:
         print("Initializing dispence motor...")
-        _dispense_motor_instance = A4988StepperMotor(step_pin=22, dir_pin=10, chip_handle=_get_chip())
+        _dispense_motor_instance = A4988StepperMotor(step_pin=22, dir_pin=10, enable_pin=27, chip_handle=_get_chip())
         print("dispense motor initialized")
     return _dispense_motor_instance
     
 
 
+# def step_clockwise(motor):
+#     global current_bin, step_count
+#     motor.rotate(REV_PER_BIN, rpm=60, clockwise=True)
+#     current_bin += 1
+#     step_count += 1
+#     if current_bin > NUM_BINS:
+#         current_bin = 1
+
+
+# def step_counterclockwise(motor):
+#     global current_bin, step_count
+#     motor.rotate(REV_PER_BIN, rpm=60, clockwise=False)
+#     current_bin -= 1
+#     step_count-=1
+#     if current_bin < 1:
+#         current_bin = NUM_BINS
+
+def _apply_step(clockwise):
+    global step_count, current_bin
+    motor = _get_bin_motor()
+
+    if clockwise:
+        motor.rotate(REV_PER_BIN, rpm=60, clockwise=True)
+        current_bin = (current_bin % NUM_BINS) + 1
+        step_count += 1
+    else:
+        motor.rotate(REV_PER_BIN, rpm=60, clockwise=False)
+        current_bin -= 1
+        if current_bin < 1:
+            current_bin = NUM_BINS
+        step_count -= 1
+
+    # Hit +18 — wound clockwise too far, unwind counterclockwise
+    if step_count >= 18:
+        print("Rotational limit reached (+18), unwinding CCW...")
+        for _ in range(18):
+            motor.rotate(REV_PER_BIN, rpm=60, clockwise=False)
+        step_count = 0
+
+    # Hit -18 — wound counterclockwise too far, unwind clockwise
+    elif step_count <= -18:
+        print("Rotational limit reached (-18), unwinding CW...")
+        for _ in range(18):
+            motor.rotate(REV_PER_BIN, rpm=60, clockwise=True)
+        step_count = 0
+
+
 def step_clockwise(motor):
-    global current_bin
-    motor.rotate(REV_PER_BIN, rpm=60, clockwise=True)
-    current_bin += 1
-    if current_bin > NUM_BINS:
-        current_bin = 1
+    _apply_step(clockwise=True)
 
 
 def step_counterclockwise(motor):
-    global current_bin
-    motor.rotate(REV_PER_BIN, rpm=60, clockwise=False)
-    current_bin -= 1
-    if current_bin < 1:
-        current_bin = NUM_BINS
+    _apply_step(clockwise=False)
 
 
 def move_bin(target_bin):

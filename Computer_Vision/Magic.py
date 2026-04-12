@@ -12,12 +12,14 @@ import time
 
 
 
-def magic_main(sort_by):
+def magic_main(sort_by, pause_event):
     global Cards
     temp=0
     write_csv.create_csv("magic")
     setlist=[]
     card_counter=0
+    dispenser._get_bin_motor().enable()
+    dispenser._get_dispense_motor().enable()
     servo.initialize()
     
     url = f"https://api.scryfall.com/sets"
@@ -30,14 +32,19 @@ def magic_main(sort_by):
         servo.hold_card()
         dispenser.dispense_card()
         camera.capture_image()
-        text = read_cards.read("demo1")
+        for attempt in range(3):
+            camera.capture_image()
+            text = read_cards.read("image_capture")
 
-        if text is None: # change to if it reads sortware then the loop stops, for now it just tries 3 times then stops
-            temp+=1
-            if temp>=3:
-                return None
-    
-        set_code,col_num=isolate_identifier(text,setlist)
+            if text is None:
+                temp += 1
+                if temp >= 3:
+                    return None
+                continue
+
+            set_code, col_num = isolate_identifier(text, setlist)
+            if set_code != "unknown" and col_num is not None:
+                break
         name,color,type,price=get_parameters(set_code, col_num)
 
 
@@ -69,6 +76,29 @@ def magic_main(sort_by):
         card_counter+=1
         servo.release_card()
         time.sleep(2)
+
+
+        time.sleep(2)
+
+       
+        sortware_detected = False
+        for attempt in range(3):  
+            camera.capture_image()
+            text = read_cards.read("image_capture")
+
+            if text is None:
+                continue
+
+            flat = " ".join(text).upper()
+            flat = re.sub(r"[^A-Z0-9]", "", flat)  # strip spaces/punctuation
+
+            if re.search(r"S[O0]RT", flat) or re.search(r"W[A4]RE", flat):
+                sortware_detected = True
+                break
+
+        if not sortware_detected:
+            pause_event.set() 
+            return
 
 
 ###### HELPER FUNCTIONS #####

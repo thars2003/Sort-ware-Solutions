@@ -32,8 +32,8 @@ def initialize():
 
 def hold_card():
 
-    move_servo_degrees(80)
+    move_servo_degrees(95)
 
 def release_card():
-    move_servo_degrees(45)
+    move_servo_degrees(65)
     move_servo_degrees(97)
