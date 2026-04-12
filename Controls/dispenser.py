@@ -42,7 +42,7 @@ class A4988StepperMotor:
 
     def enable(self):
         if self.ENABLE_PIN is not None:
-            lgpio.gpio_write(self.h, self.ENABLE_PIN, 0)  # Low = on
+            lgpio.gpio_write(self.h, self.ENABLE_PIN, 0)  # Low = on add a rotational limit
 
     def disable(self):
         if self.ENABLE_PIN is not None:
