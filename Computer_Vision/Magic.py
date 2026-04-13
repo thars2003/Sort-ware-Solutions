@@ -85,6 +85,7 @@ def magic_main(sort_by, pause_event):
         for attempt in range(3):  
             camera.capture_image()
             text = read_cards.read("image_capture")
+            print("Reading card again")
 
             if text is None:
                 continue

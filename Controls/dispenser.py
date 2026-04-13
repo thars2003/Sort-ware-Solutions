@@ -2,6 +2,7 @@ import lgpio
 import time
 import atexit
 
+
 NUM_BINS = 9
 REV_PER_BIN = 1.0  # Revolutions per bin
 current_bin = 1  # Track current bin
@@ -167,11 +168,17 @@ def _apply_step(clockwise):
 
 
 def step_clockwise(motor):
+    _get_bin_motor().enable()
     _apply_step(clockwise=True)
+    motor.rotate(.1, rpm=30, clockwise=False) 
+    _get_bin_motor().disable()
 
 
 def step_counterclockwise(motor):
+    _get_bin_motor().enable()
     _apply_step(clockwise=False)
+    motor.rotate(.1, rpm=30, clockwise=True) 
+    _get_bin_motor().disable()
 
 
 def move_bin(target_bin):
@@ -194,6 +201,7 @@ def move_bin(target_bin):
 
 def dispense_card():
     motor = _get_dispense_motor()
+    motor.enable()
     print(f"Dispense motor STEP_PIN={motor.STEP_PIN}, DIR_PIN={motor.DIR_PIN}, handle={motor.h}")
     print("Dispensing card...")
     motor.rotate(1.845, rpm=30, clockwise=False) #1.632
@@ -202,7 +210,7 @@ def dispense_card():
     # print("Dispensing card...")
     motor.rotate(0.4, rpm=30, clockwise=True)
     # time.sleep(0.3)
-
+    motor.disable()
 
 def _cleanup():
     global _chip_handle

@@ -35,5 +35,10 @@ def hold_card():
     move_servo_degrees(95)
 
 def release_card():
-    move_servo_degrees(65)
+    move_servo_degrees(55)
     move_servo_degrees(97)
+
+hold_card()
+time.sleep(3)
+release_card()
+time.sleep(3)

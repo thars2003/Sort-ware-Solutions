@@ -105,12 +105,12 @@ def stop():
 
 @app.route('/calibrate/left', methods=['POST'])
 def calibrate_left():
-    dispenser.step_counterclockwise(dispenser._get_bin_motor())
+    dispenser.step_clockwise(dispenser._get_bin_motor())
     return '', 204
 
 @app.route('/calibrate/right', methods=['POST'])
 def calibrate_right():
-    dispenser.step_clockwise(dispenser._get_bin_motor())
+    dispenser.step_counterclockwise(dispenser._get_bin_motor())
     return '', 204
 
 
