@@ -6,27 +6,22 @@ dispenser._get_bin_motor().disable()
 dispenser._get_dispense_motor().enable()
 
 dispenser.dispense_card()
-
+dispenser.dispense_card()
+dispenser.dispense_card()
+dispenser.dispense_card()
+dispenser.dispense_card()
 dispenser.dispense_card()
 dispenser.dispense_card()
 
-dispenser.dispense_card()
 
-dispenser.dispense_card()
-dispenser.dispense_card()
-
-dispenser.dispense_card()
-
-dispenser.dispense_card()
-dispenser.dispense_card()
 
 
 dispenser._get_dispense_motor().disable()
 dispenser._get_bin_motor().disable()
 
 
-
 # dispenser.move_bin(9)
+
 # dispenser.move_bin(4)
 # time.sleep(5)
 # time.sleep(5)

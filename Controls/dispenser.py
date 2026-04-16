@@ -5,7 +5,6 @@ import atexit
 
 NUM_BINS = 9
 REV_PER_BIN = 1.0  # Revolutions per bin
-current_bin = 1  # Track current bin
 step_count = 0  # Track total steps
 
 # Shared chip handle
@@ -86,9 +85,9 @@ class A4988StepperMotor:
         delay = 60.0 / (rpm * self.steps_per_rev * 2)
         min_delay = 0.005
         if delay < min_delay:
-            print(f"RPM too high for safe operation, using min_delay={min_delay}s")
+            # print(f"RPM too high for safe operation, using min_delay={min_delay}s")
             delay = min_delay
-        print(f"Rotating {revolutions} revolutions at {rpm} RPM ({'CW' if clockwise else 'CCW'}), step delay: {delay:.4f}s")
+        # print(f"Rotating {revolutions} revolutions at {rpm} RPM ({'CW' if clockwise else 'CCW'}), step delay: {delay:.4f}s")
         self.step(steps, delay, clockwise)
 
     def cleanup(self):
@@ -103,7 +102,7 @@ def _get_bin_motor():
     global _bin_motor_instance
     print("_get_bin_motor called")
     if _bin_motor_instance is None:
-        print("Initializing bin motor...")
+        # print("Initializing bin motor...")
         _bin_motor_instance = A4988StepperMotor(step_pin=13, dir_pin=19, enable_pin=11, chip_handle=_get_chip())
         print("Bin motor initialized")
     return _bin_motor_instance
@@ -113,29 +112,11 @@ def _get_dispense_motor():
     global _dispense_motor_instance
     print("_get_dispense_motor called")
     if _dispense_motor_instance is None:
-        print("Initializing dispence motor...")
+        # print("Initializing dispence motor...")
         _dispense_motor_instance = A4988StepperMotor(step_pin=22, dir_pin=10, enable_pin=27, chip_handle=_get_chip())
         print("dispense motor initialized")
     return _dispense_motor_instance
     
-
-
-# def step_clockwise(motor):
-#     global current_bin, step_count
-#     motor.rotate(REV_PER_BIN, rpm=60, clockwise=True)
-#     current_bin += 1
-#     step_count += 1
-#     if current_bin > NUM_BINS:
-#         current_bin = 1
-
-
-# def step_counterclockwise(motor):
-#     global current_bin, step_count
-#     motor.rotate(REV_PER_BIN, rpm=60, clockwise=False)
-#     current_bin -= 1
-#     step_count-=1
-#     if current_bin < 1:
-#         current_bin = NUM_BINS
 
 def _apply_step(clockwise):
     global step_count, current_bin
@@ -154,14 +135,14 @@ def _apply_step(clockwise):
 
     # Hit +18 — wound clockwise too far, unwind counterclockwise
     if step_count >= 18:
-        print("Rotational limit reached (+18), unwinding CCW...")
+        # print("Rotational limit reached (+18), unwinding CCW...")
         for _ in range(18):
             motor.rotate(REV_PER_BIN, rpm=60, clockwise=False)
         step_count = 0
 
     # Hit -18 — wound counterclockwise too far, unwind clockwise
     elif step_count <= -18:
-        print("Rotational limit reached (-18), unwinding CW...")
+        # print("Rotational limit reached (-18), unwinding CW...")
         for _ in range(18):
             motor.rotate(REV_PER_BIN, rpm=60, clockwise=True)
         step_count = 0
@@ -171,6 +152,7 @@ def step_clockwise(motor):
     _get_bin_motor().enable()
     _apply_step(clockwise=True)
     motor.rotate(.1, rpm=30, clockwise=False) 
+    time.sleep(1)
     _get_bin_motor().disable()
 
 
@@ -178,12 +160,15 @@ def step_counterclockwise(motor):
     _get_bin_motor().enable()
     _apply_step(clockwise=False)
     motor.rotate(.1, rpm=30, clockwise=True) 
+    time.sleep(1)
     _get_bin_motor().disable()
 
+current_bin = 1 
 
 def move_bin(target_bin):
     motor = _get_bin_motor()
     global current_bin
+    print(f"current:{current_bin}target_bin:{target_bin}")
 
     if target_bin == current_bin:
         return
@@ -202,10 +187,10 @@ def move_bin(target_bin):
 def dispense_card():
     motor = _get_dispense_motor()
     motor.enable()
-    print(f"Dispense motor STEP_PIN={motor.STEP_PIN}, DIR_PIN={motor.DIR_PIN}, handle={motor.h}")
+    # print(f"Dispense motor STEP_PIN={motor.STEP_PIN}, DIR_PIN={motor.DIR_PIN}, handle={motor.h}")
     print("Dispensing card...")
-    motor.rotate(1.845, rpm=30, clockwise=False) #1.632 Tharshini
-    # motor.rotate(1.845, rpm=60, clockwise=False) #Louis Test
+    #motor.rotate(1.845, rpm=30, clockwise=False) #1.632 Tharshini
+    motor.rotate(1.845, rpm=60, clockwise=False) #Louis Test
     time.sleep(1)
     # motor = _get_dispense_motor()
     # print("Dispensing card...")

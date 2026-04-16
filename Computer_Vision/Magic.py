@@ -14,38 +14,64 @@ import time
 
 
 
-def magic_main(sort_by, pause_event):
+def magic_main(sort_by, pause_event, stop_event):
     global Cards
     write_csv.create_csv("magic")
     setlist=[]
-    card_counter=0
+    card_counter=1
     dispenser._get_bin_motor().enable()
     dispenser._get_dispense_motor().enable()
     servo.initialize()
+    # servo.release_card() #Louis Add for debug
     
     url = f"https://api.scryfall.com/sets"
     response = requests.get(url)
     sets = response.json()
     for s in sets["data"]:
         setlist.append(s["code"])
-
+    stop_counter=0
     while True:
+        if check_pause(pause_event, stop_event):
+            break
         servo.hold_card()
+
         dispenser.dispense_card()
-        camera.capture_image()
+        # camera.capture_image()
+        stop_break=False
+
         for attempt in range(3):
+            if stop_break:
+                break
+            if check_pause(pause_event, stop_event):
+                break
             camera.capture_image()
             text = read_cards.read("image_capture")
+            print(text)
 
             if text is None:
                 if attempt==2:
                     return None
                 continue
+        
+            
+            flat = " ".join(text).upper()
+            flat = re.sub(r"[^A-Z0-9]", "", flat)
 
             set_code, col_num = isolate_identifier(text, setlist)
             print(set_code, col_num)
             if set_code != "unknown" and col_num is not None:
                 break
+
+            elif (re.search(r"S[O0]RT", flat) or re.search(r"W[A4]RE", flat)) and stop_counter <3:
+                stop_counter+=1
+                stop_break=True
+                print(stop_counter)
+                if stop_counter >2:
+                    print("stoping")
+                    stop_event.set()
+                    time.sleep(4)
+                    buzzer.boot_buzzer()   
+                continue
         name,color,type,price=get_parameters(set_code, col_num)
 
 
@@ -79,15 +105,12 @@ def magic_main(sort_by, pause_event):
         #Card Release
         servo.release_card()
         
-
-
-       
         sortware_detected=False
        
         for attempt in range(3):  
             camera.capture_image()
             text = read_cards.read("image_capture")
-            print (text)
+            # print (text)
             print("Reading card again")
 
             if text is None:
@@ -109,11 +132,12 @@ def magic_main(sort_by, pause_event):
         if not sortware_detected:
             #servo.release()
             print("did not sortware")
+            buzzer.boot_buzzer()
             pause_event.set() 
             time.sleep(10)
             
-            buzzer.boot_buzzer()
-
+            
+        
         # return
 
 
@@ -175,3 +199,10 @@ def get_parameters(set_code, col_num):
     price = card_info["prices"]["usd"]
 
     return name, color, type, price
+
+def check_pause(pause_event, stop_event):
+    while pause_event.is_set():
+        time.sleep(0.1)
+    # if stop_event.is_set():
+    #     return True
+    return False

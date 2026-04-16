@@ -7,17 +7,16 @@ from Controls import dispenser
 # from Computer_Vision import Led
 app = Flask(__name__)
 wifi_device = "wlan0"
-def initialize():
-    dispenser._get_bin_motor().disable()
-    dispenser._get_dispense_motor().disable()
+
 
 @app.route("/")
+
 def home():
     return render_template("home.html")
-
 def boot_buzzer():
     import lgpio
     import time
+    
 
     BUZZER_PIN = 20
     # Ensure melody and durations are accessible (passed in or defined)
@@ -48,9 +47,13 @@ def boot_buzzer():
         lgpio.gpio_write(h_buzz, BUZZER_PIN, 0)
         lgpio.gpio_free(h_buzz, BUZZER_PIN)
         lgpio.gpiochip_close(h_buzz)
+    dispenser._get_bin_motor().disable()
+    print("disabled")
+    dispenser._get_dispense_motor().disable()
 
 
 threading.Thread(target=boot_buzzer, daemon=True).start()
+
 OUTPUT_FOLDER="/home/sortware/Documents/Sort-ware-Solutions/Output_Files"
 @app.route("/download-csv")
 def download_csv():
@@ -83,7 +86,7 @@ def card_sort_stream(sort_value):
         return
     generator = None
     if sort_value.startswith("mtg"):
-        generator = Magic.magic_main(sort_value, pause_event)
+        generator = Magic.magic_main(sort_value, pause_event, stop_event)
     elif sort_value.startswith("pokemon"):
         generator = Pokemon.pokemon_main(sort_value)
     else:
