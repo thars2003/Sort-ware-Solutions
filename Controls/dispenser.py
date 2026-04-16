@@ -81,7 +81,7 @@ class A4988StepperMotor:
             lgpio.gpio_write(self.h, self.STEP_PIN, 0)
             time.sleep(delay)
 
-    def rotate(self, revolutions, rpm=60, clockwise=True):
+    def rotate(self, revolutions, rpm, clockwise=True):
         steps = int(revolutions * self.steps_per_rev)
         delay = 60.0 / (rpm * self.steps_per_rev * 2)
         min_delay = 0.005
@@ -204,11 +204,12 @@ def dispense_card():
     motor.enable()
     print(f"Dispense motor STEP_PIN={motor.STEP_PIN}, DIR_PIN={motor.DIR_PIN}, handle={motor.h}")
     print("Dispensing card...")
-    motor.rotate(1.845, rpm=30, clockwise=False) #1.632
+    motor.rotate(1.845, rpm=30, clockwise=False) #1.632 Tharshini
+    # motor.rotate(1.845, rpm=60, clockwise=False) #Louis Test
     time.sleep(1)
     # motor = _get_dispense_motor()
     # print("Dispensing card...")
-    motor.rotate(0.4, rpm=30, clockwise=True)
+    motor.rotate(0.5, rpm=30, clockwise=True)
     # time.sleep(0.3)
     motor.disable()
 

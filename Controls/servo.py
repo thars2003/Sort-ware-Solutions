@@ -28,17 +28,19 @@ signal.signal(signal.SIGINT, cleanup)
 signal.signal(signal.SIGTERM, cleanup)
 
 def initialize():
-    move_servo_degrees(97)
+    move_servo_degrees(100)
 
 def hold_card():
-
-    move_servo_degrees(95)
+    move_servo_degrees(90)
 
 def release_card():
     move_servo_degrees(55)
-    move_servo_degrees(97)
+    time.sleep(0.2)
+    move_servo_degrees(105)
+    time.sleep(3)
+   
 
-hold_card()
-time.sleep(3)
-release_card()
-time.sleep(3)
+# hold_card()
+# time.sleep(2)
+# release_card()
+# time.sleep(2)

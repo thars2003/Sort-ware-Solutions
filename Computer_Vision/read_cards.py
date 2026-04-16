@@ -55,5 +55,5 @@ def read(image_name):
     text = pytesseract.image_to_string(img)
     # text = pytesseract.image_to_string(thresh)
     lines = [line.strip() for line in text.splitlines() if line.strip()]
-
+   
     return lines

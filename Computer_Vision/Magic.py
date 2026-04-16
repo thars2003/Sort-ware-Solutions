@@ -8,13 +8,14 @@ import re
 from datetime import datetime
 from . import sorting
 from . import camera
+from Controls import buzzer
 import time
+
 
 
 
 def magic_main(sort_by, pause_event):
     global Cards
-    temp=0
     write_csv.create_csv("magic")
     setlist=[]
     card_counter=0
@@ -37,12 +38,12 @@ def magic_main(sort_by, pause_event):
             text = read_cards.read("image_capture")
 
             if text is None:
-                temp += 1
-                if temp >= 3:
+                if attempt==2:
                     return None
                 continue
 
             set_code, col_num = isolate_identifier(text, setlist)
+            print(set_code, col_num)
             if set_code != "unknown" and col_num is not None:
                 break
         name,color,type,price=get_parameters(set_code, col_num)
@@ -74,17 +75,19 @@ def magic_main(sort_by, pause_event):
         elif sort_by=="mtg_type":
             yield from sorting.magic_type(name,"Color",color,type,price,card_counter)
         card_counter+=1
+
+        #Card Release
         servo.release_card()
-        time.sleep(2)
+        
 
-
-        time.sleep(2)
 
        
-        sortware_detected = False
+        sortware_detected=False
+       
         for attempt in range(3):  
             camera.capture_image()
             text = read_cards.read("image_capture")
+            print (text)
             print("Reading card again")
 
             if text is None:
@@ -94,12 +97,24 @@ def magic_main(sort_by, pause_event):
             flat = re.sub(r"[^A-Z0-9]", "", flat)  # strip spaces/punctuation
 
             if re.search(r"S[O0]RT", flat) or re.search(r"W[A4]RE", flat):
-                sortware_detected = True
+                sortware_detected= True
+                print("read sortware")
                 break
 
+            else:
+                servo.release_card()
+                print("pushing again")
+
+
         if not sortware_detected:
+            #servo.release()
+            print("did not sortware")
             pause_event.set() 
-            return
+            time.sleep(10)
+            
+            buzzer.boot_buzzer()
+
+        # return
 
 
 ###### HELPER FUNCTIONS #####
