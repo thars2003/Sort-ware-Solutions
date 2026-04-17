@@ -84,6 +84,7 @@ stop_event.clear()
 def card_sort_stream(sort_value):
     if not sort_value:
         return
+    # stop_event.clear() #change
     generator = None
     if sort_value.startswith("mtg"):
         generator = Magic.magic_main(sort_value, pause_event, stop_event)
@@ -96,11 +97,15 @@ def card_sort_stream(sort_value):
         while pause_event.is_set():
             time.sleep(0.3)
         if stop_event.is_set():
+            yield f"event: stop\ndata: {{}}\n\n"
             break
         yield f"data: {json.dumps(card)}\n\n"
+
 @app.route("/stream")
 def stream():
     sort_value = request.args.get("sort")
+    if stop_event.is_set():          # ← frontend reconnected after stop, reject it
+        return Response("", mimetype="text/event-stream")
     stop_event.clear()
     return Response(card_sort_stream(sort_value), mimetype="text/event-stream")
 @app.route("/pause", methods=["POST"])
@@ -116,16 +121,25 @@ def stop():
     stop_event.set()
     pause_event.clear()
     return "stopped"
+@app.route("/start", methods=["POST"])
+def start():
+    stop_event.clear()
+    pause_event.clear()
+    return "started"
 
 
 @app.route('/calibrate/left', methods=['POST'])
 def calibrate_left():
-    dispenser.step_clockwise(dispenser._get_bin_motor())
+    dispenser._get_bin_motor().enable()
+    dispenser.step_clockwise(dispenser._get_bin_motor(), calibrate=False)
+    dispenser._get_bin_motor().disable()
     return '', 204
 
 @app.route('/calibrate/right', methods=['POST'])
 def calibrate_right():
-    dispenser.step_counterclockwise(dispenser._get_bin_motor())
+    dispenser._get_bin_motor().enable()
+    dispenser.step_counterclockwise(dispenser._get_bin_motor(),calibrate=True)
+    dispenser._get_bin_motor().disable()
     return '', 204
 
 

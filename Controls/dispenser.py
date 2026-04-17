@@ -6,6 +6,7 @@ import atexit
 NUM_BINS = 9
 REV_PER_BIN = 1.0  # Revolutions per bin
 step_count = 0  # Track total steps
+calibrate=False
 
 # Shared chip handle
 _chip_handle = None
@@ -48,25 +49,7 @@ class A4988StepperMotor:
         if self.ENABLE_PIN is not None:
             lgpio.gpio_write(self.h, self.ENABLE_PIN, 1)  # High = off
 
-# class A4988StepperMotor:
-#     def __init__(self, step_pin, dir_pin, steps_per_rev=200, chip_handle=None):
-#         self.STEP_PIN = step_pin
-#         self.DIR_PIN = dir_pin
-#         self.steps_per_rev = steps_per_rev
-#         self.h = chip_handle if chip_handle is not None else lgpio.gpiochip_open(4)
-#         try:
-#             lgpio.gpio_free(self.h, self.STEP_PIN)
-#         except lgpio.error:
-#             pass
-
-#         try:
-#             lgpio.gpio_free(self.h, self.DIR_PIN)
-#         except lgpio.error:
-#             pass
-#         lgpio.gpio_claim_output(self.h, self.STEP_PIN)
-#         lgpio.gpio_claim_output(self.h, self.DIR_PIN)
-#         lgpio.gpio_write(self.h, self.STEP_PIN, 0)
-#         lgpio.gpio_write(self.h, self.DIR_PIN, 0)
+#
 
     def set_direction(self, clockwise=True):
         lgpio.gpio_write(self.h, self.DIR_PIN, 1 if clockwise else 0)
@@ -89,6 +72,36 @@ class A4988StepperMotor:
             delay = min_delay
         # print(f"Rotating {revolutions} revolutions at {rpm} RPM ({'CW' if clockwise else 'CCW'}), step delay: {delay:.4f}s")
         self.step(steps, delay, clockwise)
+
+    def rotate_smooth(self, revolutions, min_rpm=10, max_rpm=60, clockwise=True):
+        steps = int(revolutions * self.steps_per_rev)
+        self.set_direction(clockwise)
+        
+        # Bell curve: ramp up for first 1/3, full speed for middle 1/3, ramp down for last 1/3
+        ramp_steps = steps // 3
+        
+        for i in range(steps):
+            # Calculate current rpm based on position in bell curve
+            if i < ramp_steps:
+                # Ramp up
+                progress = i / ramp_steps
+            elif i > steps - ramp_steps:
+                # Ramp down
+                progress = (steps - i) / ramp_steps
+            else:
+                # Full speed
+                progress = 1.0
+
+            current_rpm = min_rpm + (max_rpm - min_rpm) * progress
+            delay = 60.0 / (current_rpm * self.steps_per_rev * 2)
+            min_delay = 0.005
+            if delay < min_delay:
+                delay = min_delay
+
+            lgpio.gpio_write(self.h, self.STEP_PIN, 1)
+            time.sleep(delay)
+            lgpio.gpio_write(self.h, self.STEP_PIN, 0)
+            time.sleep(delay)
 
     def cleanup(self):
         pass  # Chip handle is shared, closed in _cleanup()
@@ -123,11 +136,11 @@ def _apply_step(clockwise):
     motor = _get_bin_motor()
 
     if clockwise:
-        motor.rotate(REV_PER_BIN, rpm=60, clockwise=True)
+        motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=True)
         current_bin = (current_bin % NUM_BINS) + 1
         step_count += 1
     else:
-        motor.rotate(REV_PER_BIN, rpm=60, clockwise=False)
+        motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=False)
         current_bin -= 1
         if current_bin < 1:
             current_bin = NUM_BINS
@@ -137,37 +150,41 @@ def _apply_step(clockwise):
     if step_count >= 18:
         # print("Rotational limit reached (+18), unwinding CCW...")
         for _ in range(18):
-            motor.rotate(REV_PER_BIN, rpm=60, clockwise=False)
+            motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=False)
         step_count = 0
 
     # Hit -18 — wound counterclockwise too far, unwind clockwise
     elif step_count <= -18:
         # print("Rotational limit reached (-18), unwinding CW...")
         for _ in range(18):
-            motor.rotate(REV_PER_BIN, rpm=60, clockwise=True)
+            motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=True)
         step_count = 0
 
 
-def step_clockwise(motor):
-    _get_bin_motor().enable()
+def step_clockwise(motor,calibrate):
+    global current_bin
     _apply_step(clockwise=True)
-    motor.rotate(.1, rpm=30, clockwise=False) 
-    time.sleep(1)
-    _get_bin_motor().disable()
-
-
-def step_counterclockwise(motor):
-    _get_bin_motor().enable()
+    # motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=False)
+    if calibrate:
+        current_bin=1
+        calibrate=False
+   
+def step_counterclockwise(motor,calibrate):
+    global current_bin
     _apply_step(clockwise=False)
-    motor.rotate(.1, rpm=30, clockwise=True) 
-    time.sleep(1)
-    _get_bin_motor().disable()
+    # motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=True)
+    if calibrate:
+        current_bin=1
+        calibrate=False
+
 
 current_bin = 1 
 
 def move_bin(target_bin):
+    global calibrate
     motor = _get_bin_motor()
     global current_bin
+    _get_bin_motor().enable()
     print(f"current:{current_bin}target_bin:{target_bin}")
 
     if target_bin == current_bin:
@@ -178,11 +195,11 @@ def move_bin(target_bin):
 
     if cw_steps <= ccw_steps:
         for _ in range(cw_steps):
-            step_clockwise(motor)
+            step_clockwise(motor,calibrate)
     else:
         for _ in range(ccw_steps):
-            step_counterclockwise(motor)
-
+            step_counterclockwise(motor,calibrate)
+    _get_bin_motor().disable()
 
 def dispense_card():
     motor = _get_dispense_motor()

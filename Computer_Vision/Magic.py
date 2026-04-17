@@ -38,7 +38,8 @@ def magic_main(sort_by, pause_event, stop_event):
         dispenser.dispense_card()
         # camera.capture_image()
         stop_break=False
-
+        if check_pause(pause_event, stop_event):
+                break
         for attempt in range(3):
             if stop_break:
                 break
@@ -69,9 +70,12 @@ def magic_main(sort_by, pause_event, stop_event):
                 if stop_counter >2:
                     print("stoping")
                     stop_event.set()
+                    yield {"event": "stop", "reason": "sortware_limit"} 
                     time.sleep(4)
                     buzzer.boot_buzzer()   
                 continue
+            if stop_event.is_set():
+                break
         name,color,type,price=get_parameters(set_code, col_num)
 
 
@@ -202,7 +206,9 @@ def get_parameters(set_code, col_num):
 
 def check_pause(pause_event, stop_event):
     while pause_event.is_set():
+        if stop_event.is_set():  # don't get stuck in pause loop if stop is called
+            return True
         time.sleep(0.1)
-    # if stop_event.is_set():
-    #     return True
+    if stop_event.is_set():
+        return True
     return False

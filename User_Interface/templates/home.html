@@ -176,6 +176,7 @@ btn.addEventListener('click', () => {
     }
 });
 
+
 stopBtn.addEventListener('click', () => {
     stopStream();
     btn.classList.remove('playing');
@@ -199,7 +200,16 @@ function startStream() {
         const card = JSON.parse(event.data);
         appendLog(card);
     };
-
+     eventSource.addEventListener('stop', () => {
+            btn.classList.remove('playing');
+            btn.textContent = '▶';
+            stopBtn.classList.add('stopped');
+            setRadiosDisabled(false);
+            sortStatusEl.textContent = 'Stopped';
+            sortStatusEl.className = 'status-value status-stopped';
+            eventSource.close();
+            eventSource = null;
+        });
     eventSource.onerror = () => {
         console.warn("Stream ended or error");
     };
