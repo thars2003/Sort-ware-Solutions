@@ -194,13 +194,16 @@ function startStream() {
     log.innerHTML = "";
 
     const sort = getSelectedSort();
-    eventSource = new EventSource(`/stream?sort=${sort}`);
 
-    eventSource.onmessage = (event) => {
-        const card = JSON.parse(event.data);
-        appendLog(card);
-    };
-     eventSource.addEventListener('stop', () => {
+    fetch('/start', { method: 'POST' }).then(() => {
+        eventSource = new EventSource(`/stream?sort=${sort}`);
+
+        eventSource.onmessage = (event) => {
+            const card = JSON.parse(event.data);
+            appendLog(card);
+        };
+
+        eventSource.addEventListener('stop', () => {
             btn.classList.remove('playing');
             btn.textContent = '▶';
             stopBtn.classList.add('stopped');
@@ -210,9 +213,18 @@ function startStream() {
             eventSource.close();
             eventSource = null;
         });
-    eventSource.onerror = () => {
-        console.warn("Stream ended or error");
-    };
+
+        eventSource.addEventListener('pause', () => {
+            btn.classList.remove('playing');
+            btn.textContent = '▶';
+            sortStatusEl.textContent = 'Paused';
+            sortStatusEl.className = 'status-value status-paused';
+        });
+
+        eventSource.onerror = () => {
+            console.warn("Stream ended or error");
+        };
+    });
 }
 
 function appendLog(card) {

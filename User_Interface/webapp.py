@@ -94,11 +94,13 @@ def card_sort_stream(sort_value):
         return
     for card in generator:
         # Wait if paused
-        while pause_event.is_set():
-            time.sleep(0.3)
         if stop_event.is_set():
             yield f"event: stop\ndata: {{}}\n\n"
             break
+        if pause_event.is_set():
+            yield f"event: pause\ndata: {{}}\n\n"  # ← push pause to UI
+        while pause_event.is_set():
+            time.sleep(0.3)
         yield f"data: {json.dumps(card)}\n\n"
 
 @app.route("/stream")
@@ -126,12 +128,18 @@ def start():
     stop_event.clear()
     pause_event.clear()
     return "started"
+@app.route("/status")
+def status():
+    return json.jsonify({
+        'paused': pause_event.is_set(),
+        'stopped': stop_event.is_set()
+    })
 
 
 @app.route('/calibrate/left', methods=['POST'])
 def calibrate_left():
     dispenser._get_bin_motor().enable()
-    dispenser.step_clockwise(dispenser._get_bin_motor(), calibrate=False)
+    dispenser.step_clockwise(dispenser._get_bin_motor(), calibrate=True)
     dispenser._get_bin_motor().disable()
     return '', 204
 

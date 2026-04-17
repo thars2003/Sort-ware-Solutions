@@ -79,21 +79,23 @@ def magic_main(sort_by, pause_event, stop_event):
         name,color,type,price=get_parameters(set_code, col_num)
 
 
-
-        if len(set(color)) > 1:
-            color="Multicolor"
-        elif len(color) == 0:
-            color="Color-Less"
-        elif "U" in color:
-            color="Blue"
-        elif "W" in color:
-            color="White"
-        elif "R" in color:
-            color="Red"
-        elif "B" in color:
-            color="Black"
-        elif "G" in color:
-            color="Green"
+        if color == "unknown":
+            color = "Unknown"
+        elif isinstance(color, list):
+            if len(color) > 1:
+                color = "Multicolor"
+            elif len(color) == 0:
+                color = "Color-Less"
+            elif "U" in color:
+                color = "Blue"
+            elif "W" in color:
+                color = "White"
+            elif "R" in color:
+                color = "Red"
+            elif "B" in color:
+                color = "Black"
+            elif "G" in color:
+                color = "Green"
 
         type= type.split("—", 1)[0].strip()
 
@@ -138,7 +140,9 @@ def magic_main(sort_by, pause_event, stop_event):
             print("did not sortware")
             buzzer.boot_buzzer()
             pause_event.set() 
-            time.sleep(10)
+            yield {"pause": True} 
+            while pause_event.is_set():
+                time.sleep(0.3)
             
             
         
