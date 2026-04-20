@@ -50,36 +50,36 @@ def pokemon_main(sort_by, pause_event, stop_event):
                     return None
                 continue
 
-        card_counter+=1
-        text = read_cards.read("image_capture")
+        # card_counter+=1
+            text = read_cards.read("image_capture")
 
-        if text is None: # change to if it reads sortware then the loop stops, for now it just tries 3 times then stops
-            temp+=1
-            if temp>=3:
-                return None
-            
-        full_text = " ".join(text)
-        col_num=isolate_identifier(full_text)
-        print(col_num)
-        flat = " ".join(text).upper()
-        flat = re.sub(r"[^A-Z0-9]", "", flat)
+            if text is None: # change to if it reads sortware then the loop stops, for now it just tries 3 times then stops
+                temp+=1
+                if temp>=3:
+                    return None
+                
+            full_text = " ".join(text)
+            col_num=isolate_identifier(full_text)
+            print(col_num)
+            flat = " ".join(text).upper()
+            flat = re.sub(r"[^A-Z0-9]", "", flat)
 
-        if col_num is not None or col_num != "Not found":
-            break
+            if col_num is not None or col_num != "Not found":
+                break
 
-        elif (re.search(r"S[O0]RT", flat) or re.search(r"W[A4]RE", flat)) and stop_counter <3:
-            stop_counter+=1
-            stop_break=True
-            print(stop_counter)
-            if stop_counter >2:
-                print("stoping")
-                stop_event.set()
-                yield {"event": "stop", "reason": "sortware_limit"} 
-                time.sleep(4)
-                buzzer.boot_buzzer()   
-            continue
-        if stop_event.is_set():
-            break
+            elif (re.search(r"S[O0]RT", flat) or re.search(r"W[A4]RE", flat)) and stop_counter <3:
+                stop_counter+=1
+                stop_break=True
+                print(stop_counter)
+                if stop_counter >2:
+                    print("stoping")
+                    stop_event.set()
+                    yield {"event": "stop", "reason": "sortware_limit"} 
+                    time.sleep(4)
+                    buzzer.boot_buzzer()   
+                continue
+            if stop_event.is_set():
+                break
 
         name,category,type,price=get_parameters("swsh11", col_num)
         write_csv.append_csv(name,category,type,price)
@@ -128,13 +128,17 @@ def pokemon_main(sort_by, pause_event, stop_event):
 
 ###### HELPER FUNCTIONS #####
 def isolate_identifier(text):
-    match = re.search(r'(\d{1,3})/(\d{3})', text)
-    result = match.group(0) if match else "Not found"
-    col_num= result.split("/", 1)[0].strip()
-    return col_num
+    full_text = " ".join(text) if isinstance(text, list) else text
+    
+    match = re.search(r'(\d{1,3})\s*/\s*(\d{3})', full_text)
+    if match:
+        col_num = str(int(match.group(1)))  # strip leading zeros: 046 -> 46
+        return col_num
+    
+    return "Not found"
 
 def get_parameters(set_code, col_num):
-    if set_code == "unknown" or col_num == "Not found":
+    if col_num == "Not found" or col_num is None:
         return "unknown", "unknown", "unknown", "unknown"
     
     url = f"https://api.tcgdex.net/v2/en/cards/{set_code}-{col_num}"
@@ -160,7 +164,7 @@ def get_parameters(set_code, col_num):
     # Price in USD from TCGplayer
     price = None
     pricing = card_info.get("pricing", {})
-    tcg = pricing.get("tcgplayer", {})
+    tcg = pricing.get("tcgplayer", {}) or {}
     if "normal" in tcg and tcg["normal"]:
         price = tcg["normal"].get("marketPrice")
 

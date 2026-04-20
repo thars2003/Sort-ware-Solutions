@@ -5,15 +5,15 @@ import time
 dispenser._get_bin_motor().enable()
 dispenser._get_dispense_motor().enable()
 
-# dispenser.dispense_card()
-# dispenser.dispense_card()
+dispenser.dispense_card()
+dispenser.dispense_card()
 # dispenser.dispense_card()
 # dispenser.dispense_card()
 # dispenser.dispense_card()
 # dispenser.dispense_card()
 # dispenser.dispense_card()
 
-dispenser.step_clockwise(dispenser._get_bin_motor(), calibrate=True)
+# dispenser.step_clockwise(dispenser._get_bin_motor(), calibrate=True)
 
 
 dispenser._get_dispense_motor().disable()
