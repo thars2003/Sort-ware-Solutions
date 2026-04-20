@@ -134,13 +134,16 @@ def _get_dispense_motor():
 def _apply_step(clockwise):
     global step_count, current_bin
     motor = _get_bin_motor()
+    motor.enable()
 
     if clockwise:
-        motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=True)
+        # motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=True)
+        motor.rotate(REV_PER_BIN,60, clockwise=True)
         current_bin = (current_bin % NUM_BINS) + 1
         step_count += 1
     else:
-        motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=False)
+        # motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=False)
+        motor.rotate(REV_PER_BIN,60, clockwise=False)
         current_bin -= 1
         if current_bin < 1:
             current_bin = NUM_BINS
@@ -150,21 +153,24 @@ def _apply_step(clockwise):
     if step_count >= 18:
         # print("Rotational limit reached (+18), unwinding CCW...")
         for _ in range(18):
-            motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=False)
+            # motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=False)
+            motor.rotate(REV_PER_BIN,60, clockwise=False)
         step_count = 0
 
     # Hit -18 — wound counterclockwise too far, unwind clockwise
     elif step_count <= -18:
         # print("Rotational limit reached (-18), unwinding CW...")
         for _ in range(18):
-            motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=True)
+            # motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=True)
+            motor.rotate(REV_PER_BIN,60, clockwise=True)
         step_count = 0
 
-
+    motor.disable()
 def step_clockwise(motor,calibrate):
     global current_bin
     _apply_step(clockwise=True)
     # motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=False)
+    motor.rotate(REV_PER_BIN,60, clockwise=False)
     if calibrate:
         current_bin=1
         calibrate=False
@@ -173,6 +179,7 @@ def step_counterclockwise(motor,calibrate):
     global current_bin
     _apply_step(clockwise=False)
     # motor.rotate_smooth(REV_PER_BIN, min_rpm=10, max_rpm=60, clockwise=True)
+    motor.rotate(REV_PER_BIN,60, clockwise=True)
     if calibrate:
         current_bin=1
         calibrate=False

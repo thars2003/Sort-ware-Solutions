@@ -22,7 +22,6 @@ def magic_main(sort_by, pause_event, stop_event):
     dispenser._get_bin_motor().enable()
     dispenser._get_dispense_motor().enable()
     servo.initialize()
-    # servo.release_card() #Louis Add for debug
     
     url = f"https://api.scryfall.com/sets"
     response = requests.get(url)

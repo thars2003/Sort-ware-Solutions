@@ -89,7 +89,7 @@ def card_sort_stream(sort_value):
     if sort_value.startswith("mtg"):
         generator = Magic.magic_main(sort_value, pause_event, stop_event)
     elif sort_value.startswith("pokemon"):
-        generator = Pokemon.pokemon_main(sort_value)
+        generator = Pokemon.pokemon_main(sort_value, pause_event, stop_event)
     else:
         return
     for card in generator:

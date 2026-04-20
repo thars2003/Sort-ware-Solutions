@@ -2,18 +2,18 @@ import dispenser
 import time
 
 # dispenser._get_bin_motor().enable()
-dispenser._get_bin_motor().disable()
+dispenser._get_bin_motor().enable()
 dispenser._get_dispense_motor().enable()
 
-dispenser.dispense_card()
-dispenser.dispense_card()
-dispenser.dispense_card()
-dispenser.dispense_card()
-dispenser.dispense_card()
-dispenser.dispense_card()
-dispenser.dispense_card()
+# dispenser.dispense_card()
+# dispenser.dispense_card()
+# dispenser.dispense_card()
+# dispenser.dispense_card()
+# dispenser.dispense_card()
+# dispenser.dispense_card()
+# dispenser.dispense_card()
 
-
+dispenser.step_clockwise(dispenser._get_bin_motor(), calibrate=True)
 
 
 dispenser._get_dispense_motor().disable()
@@ -65,4 +65,4 @@ def boot_buzzer():
         lgpio.gpio_write(h_buzz, BUZZER_PIN, 0)
         lgpio.gpio_free(h_buzz, BUZZER_PIN)
         lgpio.gpiochip_close(h_buzz)
-boot_buzzer()
+# boot_buzzer()
