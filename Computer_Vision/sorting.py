@@ -8,7 +8,7 @@ def price(name,subtype,category,type,price,card_counter):
     if card_counter==1:
         bin_mapping= [0]*9
 
-    if price=="unknown":
+    if price=="unknown" or price=="null" or price is None:
         bin_mapping[8]=bin_mapping[8]+1
         yield from stream.live_log(card_counter, name,subtype, category, type, price, "Price", "unknown",9,bin_mapping)
         dispenser.move_bin(9)
