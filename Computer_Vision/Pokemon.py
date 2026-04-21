@@ -11,6 +11,7 @@ from Controls import dispenser
 from Controls import servo
 import time
 from Controls import buzzer
+from Computer_Vision import Led
 
 
 bin_mapping= [0]*9
@@ -33,53 +34,99 @@ def pokemon_main(sort_by, pause_event, stop_event):
         dispenser.dispense_card()
         # camera.capture_image()
 
-        stop_break=False
+        stop_breaks=False
         if check_pause(pause_event, stop_event):
                 break
-        for attempt in range(3):
-            if stop_break:
-                break
+
+        col_num = None
+
+        for attempt in range(6):
             if check_pause(pause_event, stop_event):
                 break
+            if attempt < 3:
+                Led.poke_turn_on_light(0, 0, 255)
+            else:
+                Led.poke_turn_on_light(255, 255, 255)
+
             camera.capture_image()
             text = read_cards.read("image_capture")
             print(text)
 
             if text is None:
-                if attempt==2:
-                    return None
+                print(f"Attempt {attempt+1}: text is None, retrying...")
                 continue
 
-        # card_counter+=1
-            text = read_cards.read("image_capture")
-
-            if text is None: # change to if it reads sortware then the loop stops, for now it just tries 3 times then stops
-                temp+=1
-                if temp>=3:
-                    return None
-                
             full_text = " ".join(text)
-            col_num=isolate_identifier(full_text)
-            print(col_num)
-            flat = " ".join(text).upper()
+            flat = full_text.upper()
             flat = re.sub(r"[^A-Z0-9]", "", flat)
 
-            if col_num is not None or col_num != "Not found":
+            # Check for sortware BEFORE trying to isolate identifier
+            if re.search(r"S[O0]RT", flat) or re.search(r"W[A4]RE", flat):
+                stop_counter += 1
+                print(f"Sortware detected ({stop_counter})")
+                if stop_counter > 2:
+                    print("stopping")
+                    stop_event.set()
+                    yield {"event": "stop", "reason": "sortware_limit"}
+                    time.sleep(4)
+                    buzzer.boot_buzzer()
+                stop_breaks = True
                 break
 
-            elif (re.search(r"S[O0]RT", flat) or re.search(r"W[A4]RE", flat)) and stop_counter <3:
-                stop_counter+=1
-                stop_break=True
-                print(stop_counter)
-                if stop_counter >2:
-                    print("stoping")
-                    stop_event.set()
-                    yield {"event": "stop", "reason": "sortware_limit"} 
-                    time.sleep(4)
-                    buzzer.boot_buzzer()   
-                continue
-            if stop_event.is_set():
+            col_num = isolate_identifier(full_text)
+            print(f"Attempt {attempt+1}: col_num = {col_num}")
+
+            # ✅ Only break if we actually found a valid col_num
+            if col_num != "Not found" and col_num is not None:
                 break
+
+            print(f"Attempt {attempt+1}: col_num not found, retrying...")
+
+        if stop_event.is_set():
+            break
+        # for attempt in range(3):
+        #     if stop_break:
+        #         break
+        #     if check_pause(pause_event, stop_event):
+        #         break
+        #     camera.capture_image()
+        #     text = read_cards.read("image_capture")
+        #     print(text)
+
+        #     if text is None:
+        #         if attempt==2:
+        #             return None
+        #         continue
+     
+        #     text = read_cards.read("image_capture")
+                
+        #     full_text = " ".join(text)
+        #     col_num=isolate_identifier(full_text)
+        #     if col_num=="Not_found":
+        #             if attempt== 2:
+        #                 return None
+        #             continue
+            
+        #     print(col_num)
+        #     flat = " ".join(text).upper()
+        #     flat = re.sub(r"[^A-Z0-9]", "", flat)
+
+        #     if col_num is not None or col_num != "Not found":
+        #         break
+
+        #     elif (re.search(r"S[O0]RT", flat) or re.search(r"W[A4]RE", flat)) and stop_counter <3:
+        #         stop_counter+=1
+        #         stop_break=True
+        #         print(stop_counter)
+        #         if stop_counter >2:
+        #             print("stoping")
+        #             stop_event.set()
+        #             yield {"event": "stop", "reason": "sortware_limit"} 
+        #             time.sleep(4)
+        #             buzzer.boot_buzzer()   
+        #         continue
+        #     if stop_event.is_set():
+        #         break
 
         name,category,type,price=get_parameters("swsh11", col_num)
         write_csv.append_csv(name,category,type,price)
@@ -132,7 +179,7 @@ def isolate_identifier(text):
     
     match = re.search(r'(\d{1,3})\s*/\s*(\d{3})', full_text)
     if match:
-        col_num = str(int(match.group(1)))  # strip leading zeros: 046 -> 46
+        col_num = str(match.group(1)) # strip leading zeros: 046 -> 46
         return col_num
     
     return "Not found"

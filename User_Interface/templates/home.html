@@ -186,8 +186,17 @@ stopBtn.addEventListener('click', () => {
     sortStatusEl.textContent = 'Stopped';
     sortStatusEl.className = 'status-value status-stopped';
 });
+
 function setRadiosDisabled(disabled) {
     document.querySelectorAll('input[name="sort"]').forEach(r => r.disabled = disabled);
+
+    // Disable/enable the action buttons
+    const actionButtons = document.querySelectorAll('.status-btn, .calibrate-btn');
+    actionButtons.forEach(btn => {
+        btn.disabled = disabled;
+        btn.style.pointerEvents = disabled ? 'none' : '';
+        btn.style.opacity = disabled ? '0.4' : '';
+    });
 }
 function startStream() {
     const log = document.getElementById("log");

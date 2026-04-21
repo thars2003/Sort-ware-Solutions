@@ -477,3 +477,8 @@ p, li {
     background-color: #800000;
     color: #111111;
 }
+.status-btn[style*="pointer-events: none"],
+.calibrate-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

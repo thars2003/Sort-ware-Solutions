@@ -4,7 +4,7 @@ import time
 from flask import Flask, render_template, Response, request, json, redirect, url_for,send_from_directory
 from Computer_Vision import Magic, Pokemon
 from Controls import dispenser
-# from Computer_Vision import Led
+from Computer_Vision import Led
 app = Flask(__name__)
 wifi_device = "wlan0"
 
@@ -87,8 +87,10 @@ def card_sort_stream(sort_value):
     # stop_event.clear() #change
     generator = None
     if sort_value.startswith("mtg"):
+        Led.magic_turn_on_light()
         generator = Magic.magic_main(sort_value, pause_event, stop_event)
     elif sort_value.startswith("pokemon"):
+        Led.poke_turn_on_light(0, 0, 255)
         generator = Pokemon.pokemon_main(sort_value, pause_event, stop_event)
     else:
         return

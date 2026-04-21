@@ -6,7 +6,10 @@ import pytesseract
 import shutil
 import sys
 import os
+
 import cv2
+
+# import camera
 
 # --- Auto-detect Tesseract (cross-platform) ---
 tesseract_path = shutil.which("tesseract")
@@ -57,3 +60,7 @@ def read(image_name):
     lines = [line.strip() for line in text.splitlines() if line.strip()]
    
     return lines
+
+
+# camera.capture_image()
+# print(read("image_capture"))

@@ -1,8 +1,12 @@
 import cv2
-from . import Led
+import sys
+import os
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# import Led
+
 
 def capture_image():
-    Led.turn_on_light()
+    # Led.turn_on_light()
 
     camera = cv2.VideoCapture(0)
     if not camera.isOpened():
