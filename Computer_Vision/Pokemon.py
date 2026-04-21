@@ -40,10 +40,10 @@ def pokemon_main(sort_by, pause_event, stop_event):
 
         col_num = None
 
-        for attempt in range(6):
+        for attempt in range(8):
             if check_pause(pause_event, stop_event):
                 break
-            if attempt < 3:
+            if attempt < 4:
                 Led.poke_turn_on_light(0, 0, 255)
             else:
                 Led.poke_turn_on_light(255, 255, 255)

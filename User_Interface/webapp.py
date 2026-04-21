@@ -84,7 +84,6 @@ stop_event.clear()
 def card_sort_stream(sort_value):
     if not sort_value:
         return
-    # stop_event.clear() #change
     generator = None
     if sort_value.startswith("mtg"):
         Led.magic_turn_on_light()
@@ -94,15 +93,22 @@ def card_sort_stream(sort_value):
         generator = Pokemon.pokemon_main(sort_value, pause_event, stop_event)
     else:
         return
+
     for card in generator:
-        # Wait if paused
         if stop_event.is_set():
             yield f"event: stop\ndata: {{}}\n\n"
             break
-        if pause_event.is_set():
-            yield f"event: pause\ndata: {{}}\n\n"  # ← push pause to UI
-        while pause_event.is_set():
-            time.sleep(0.3)
+
+        if isinstance(card, dict) and card.get("pause"):
+            yield f"event: pause\ndata: {{}}\n\n"
+            while pause_event.is_set():
+                time.sleep(0.3)
+            continue 
+       
+        if isinstance(card, dict) and card.get("event") == "stop":
+            yield f"event: stop\ndata: {{}}\n\n"
+            break
+
         yield f"data: {json.dumps(card)}\n\n"
 
 @app.route("/stream")

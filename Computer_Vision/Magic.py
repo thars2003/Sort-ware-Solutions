@@ -142,7 +142,7 @@ def magic_main(sort_by, pause_event, stop_event):
             yield {"pause": True} 
             while pause_event.is_set():
                 time.sleep(0.3)
-            
+            continue
             
         
         # return
